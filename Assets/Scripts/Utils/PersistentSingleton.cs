@@ -6,9 +6,9 @@ public class PersistentSingleton<T> : MonoBehaviour where T : Component {
 
     public static T Instance {
         get {
-            if (_instance == null) {
+            if (!_instance) {
                 _instance = FindAnyObjectByType<T>();
-                if (_instance == null) {
+                if (!_instance) {
                     GameObject go = new GameObject(typeof(T).Name);
                     _instance = go.AddComponent<T>();
                 }

@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55157a56320b42cf85b6147f9ef5bf45, type: 3}
   m_Name: Footsteps Config
   m_EditorClassIdentifier: Assembly-CSharp::FootstepsConfig
-  footstepsSounds: []
+  footstepsSounds:
+  - {fileID: 8300000, guid: 8dfb7dcb19a40456b91cc409384437db, type: 3}
+  - {fileID: 8300000, guid: 7298faee032794852aa7608487eface6, type: 3}
   stepInterval: 0.4
   pitchRange: {x: 0.9, y: 1.1}
-  volume: 1.1
+  volume: 1

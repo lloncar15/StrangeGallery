@@ -6,10 +6,10 @@ public class GenericSingleton<T> : MonoBehaviour where T : Component {
     
     public static T Instance {
         get {
-            if (_instance == null) {
+            if (!_instance) {
                 _instance = FindAnyObjectByType<T>();
-                if (_instance == null) {
-                    GameObject go = new GameObject(typeof(T).Name + " Auto-Generated");
+                if (!_instance) {
+                    GameObject go = new(typeof(T).Name + " Auto-Generated");
                     _instance = go.AddComponent<T>();
                 }
             }
