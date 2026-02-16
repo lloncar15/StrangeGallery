@@ -1,46 +1,95 @@
+using System;
 using UnityEngine;
-using UnityEngine.InputSystem.XInput;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovementController : MonoBehaviour {
-    [Header("References")]
-    [SerializeField] private Transform cameraHolder;
+    [Header("References")] [SerializeField]
+    private Transform cameraHolder;
+
     [SerializeField] private PlayerConfig playerConfig;
+
+    [Header("2D Movement")] [SerializeField]
+    private Transform paintingPlayerObject;
 
     private CharacterController _characterController;
     private float _cameraPitch;
     private float _verticalVelocity;
-    
+
+    private PaintingArea _currentPaintingArea;
+
+    private void OnEnable() {
+        GameStateManager.OnEnteredPainting += OnEnteredPainting;
+        GameStateManager.OnExitedPainting += OnExitedPainting;
+    }
+
+    private void OnDisable() {
+        GameStateManager.OnEnteredPainting -= OnEnteredPainting;
+        GameStateManager.OnExitedPainting -= OnExitedPainting;
+    }
+
     private void Awake() {
         _characterController = GetComponent<CharacterController>();
     }
 
     private void Update() {
-        HandleLook();
-        HandleMovement();
+        Vector2 moveInput = InputController.Instance.MoveInput;
+
+        GameState currentState = GameStateManager.GetCurrentState();
+        if (currentState == GameState.FPS) {
+            HandleLook();
+            Handle3DMovement(moveInput);
+        }
+        else if (currentState == GameState.Painting) {
+            Handle2DMovement(moveInput);
+        }
     }
-    
+
     private void HandleLook() {
         Vector2 lookInput = InputController.Instance.LookInput;
-            
+
         transform.Rotate(Vector3.up, lookInput.x * playerConfig.lookSensitivity);
-            
+
         _cameraPitch -= lookInput.y * playerConfig.lookSensitivity;
         _cameraPitch = Mathf.Clamp(_cameraPitch, -playerConfig.maxLookAngle, playerConfig.maxLookAngle);
         cameraHolder.localEulerAngles = new Vector3(_cameraPitch, 0, 0);
     }
 
-    private void HandleMovement() {
-        Vector2 moveInput = InputController.Instance.MoveInput;
+    private void Handle3DMovement(Vector2 moveInput) {
         Vector3 direction = transform.right * moveInput.x + transform.forward * moveInput.y;
 
         if (_characterController.isGrounded && _verticalVelocity < 0f) {
             _verticalVelocity = -2f;
         }
-            
+
         _verticalVelocity += playerConfig.gravity * Time.deltaTime;
         direction.y = _verticalVelocity;
-            
+
         _characterController.Move(direction * (playerConfig.moveSpeed * Time.deltaTime));
+    }
+
+    /// <summary>
+    /// Handles 2D movement on the XY plane with bounds checking.
+    /// </summary>
+    /// <param name="moveInput">Move input vector from the InputController</param>
+    private void Handle2DMovement(Vector2 moveInput) {
+        if (!_currentPaintingArea)
+            return;
+        
+        Vector3 movement = moveInput * (playerConfig.moveSpeed2D  * Time.deltaTime);
+        Vector3 newPosition = transform.position + movement;
+
+        transform.position = _currentPaintingArea.ClampToBounds(newPosition);
+    }
+
+    private void OnEnteredPainting(PaintingArea paintingArea) {
+        SetInitialPlayerPositionInPainting(paintingArea.SpawnPosition);
+    }
+
+    private void SetInitialPlayerPositionInPainting(Vector3 spawnPoint){
+        paintingPlayerObject.position = spawnPoint;
+    }
+
+    private void OnExitedPainting() {
+        
     }
 }
