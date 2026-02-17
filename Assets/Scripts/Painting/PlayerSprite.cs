@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PaintingPlayerObject : MonoBehaviour {
+public class PlayerSprite : MonoBehaviour {
     [Header("References")]
     [SerializeField] private Transform footTransform;
 
@@ -21,7 +21,16 @@ public class PaintingPlayerObject : MonoBehaviour {
     /// Sets the transform position so that the foot transform is at the given position
     /// </summary>
     /// <param name="position">The position the foot transform should be at</param>
-    public void SetPositionWithOffset(Vector3 position) {
+    private void SetPositionWithOffset(Vector3 position) {
         SetPosition(new Vector3(position.x, position.y - _footOffset, position.z));
+    }
+    
+    public void SetInitialPlayerPositionInPainting(Vector3 spawnPoint) {
+        SetPositionWithOffset(spawnPoint);
+        gameObject.SetActive(true);
+    }
+
+    public void OnExitedPainting() {
+        gameObject.SetActive(false);
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 /// Represents and monitors the playable area for the 2d gameplay. 
 /// </summary>
 [RequireComponent(typeof(PolygonCollider2D))]
-public class PaintingArea : MonoBehaviour {
+public class PlayablePaintingArea : MonoBehaviour {
     [Header("Spawn Settings")]
     [SerializeField] private Transform spawnPoint;
 

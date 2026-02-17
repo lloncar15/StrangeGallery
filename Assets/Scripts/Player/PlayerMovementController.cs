@@ -8,13 +8,13 @@ public class PlayerMovementController : MonoBehaviour {
     [SerializeField] private PlayerConfig playerConfig;
 
     [Header("2D Movement")]
-    [SerializeField] private PaintingPlayerObject paintingPlayerObject;
+    [SerializeField] private PlayerSprite playerSprite;
 
     private CharacterController _characterController;
     private float _cameraPitch;
     private float _verticalVelocity;
 
-    private PaintingArea _currentPaintingArea;
+    private PlayablePaintingArea _currentPlayablePaintingArea;
     public static event Action OnFinishedExitingPainting;
 
     private void OnEnable() {
@@ -72,30 +72,27 @@ public class PlayerMovementController : MonoBehaviour {
     /// </summary>
     /// <param name="moveInput">Move input vector from the InputController</param>
     private void Handle2DMovement(Vector2 moveInput) {
-        if (!_currentPaintingArea)
+        if (!_currentPlayablePaintingArea)
             return;
         
-        Transform paintingPlayerTransform = paintingPlayerObject.transform;
+        Transform paintingPlayerTransform = playerSprite.transform;
         
         Vector3 movement = moveInput * (playerConfig.moveSpeed2D  * Time.deltaTime);
         Vector3 newPosition = paintingPlayerTransform.position + movement;
         
-        paintingPlayerTransform.position = _currentPaintingArea.ClampToBounds(newPosition, paintingPlayerObject.FootOffset);
+        paintingPlayerTransform.position = _currentPlayablePaintingArea.ClampToBounds(newPosition, playerSprite.FootOffset);
     }
 
-    private void OnEnteredPainting(PaintingArea paintingArea) {
-        _currentPaintingArea = paintingArea;
-        SetInitialPlayerPositionInPainting(paintingArea.SpawnPosition);
+    //TODO: this flow should probably be in GameStateManager
+    private void OnEnteredPainting(PlayablePaintingArea playablePaintingArea) {
+        _currentPlayablePaintingArea = playablePaintingArea;
+        playerSprite.SetInitialPlayerPositionInPainting(playablePaintingArea.SpawnPosition);
     }
     
+    //TODO: this flow should probably be in GameStateManager
     private void OnExitedPainting() {
-        _currentPaintingArea = null;
-        paintingPlayerObject.gameObject.SetActive(false);
+        _currentPlayablePaintingArea = null;
+        playerSprite.OnExitedPainting();
         OnFinishedExitingPainting?.Invoke();
-    }
-
-    private void SetInitialPlayerPositionInPainting(Vector3 spawnPoint) {
-        paintingPlayerObject.SetPositionWithOffset(spawnPoint);
-        paintingPlayerObject.gameObject.SetActive(true);
     }
 }

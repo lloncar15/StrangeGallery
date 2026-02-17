@@ -59,7 +59,7 @@ public class PaintingObject : MonoBehaviour {
         associatedCamera.StopRendering();
     }
 
-    private void OnEnteredPainting(PaintingArea _) {
+    private void OnEnteredPainting(PlayablePaintingArea _) {
         EnterPaintingMode();
     }
 

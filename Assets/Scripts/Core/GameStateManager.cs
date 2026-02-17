@@ -5,10 +5,10 @@ using UnityEngine.InputSystem;
 public class GameStateManager : PersistentSingleton<GameStateManager> {
     [Header("State")]
     [SerializeField] private GameState currentState = GameState.FPS;
-    public PaintingArea paintingAreaTEST;
+    public PlayablePaintingArea playablePaintingAreaTest;
     
     public static event Action<GameState> OnStateChange;
-    public static event Action<PaintingArea> OnEnteredPainting;
+    public static event Action<PlayablePaintingArea> OnEnteredPainting;
     public static event Action OnExitedPainting;
     
     public static GameState GetCurrentState() => Instance.currentState;
@@ -24,7 +24,7 @@ public class GameStateManager : PersistentSingleton<GameStateManager> {
     public void OnTest() {
         if (currentState == GameState.FPS) {
             ChangeState(GameState.Painting);
-            OnEnteredPainting?.Invoke(paintingAreaTEST);
+            OnEnteredPainting?.Invoke(playablePaintingAreaTest);
         }
         else {
             ChangeState(GameState.FPS);
