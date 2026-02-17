@@ -25,9 +25,7 @@ public class PlayablePaintingArea : MonoBehaviour {
     /// <param name="position">The position to check</param>
     /// <returns>True if position is within bounds</returns>
     private bool IsWithinBounds(Vector3 position) {
-        Vector3 localPoint = boundsCollider.transform.InverseTransformPoint(position);
-
-        return boundsCollider.OverlapPoint(new Vector2(localPoint.x, localPoint.y));
+        return boundsCollider.OverlapPoint(new Vector2(position.x, position.y));
     }
 
     /// <summary>
@@ -35,18 +33,18 @@ public class PlayablePaintingArea : MonoBehaviour {
     /// </summary>
     /// <param name="position">The position to clamp</param>
     /// <param name="footOffsetY"> The offset of players feet on the Y axis</param>
-    /// <returns></returns>
+    /// <returns>The clamped sprite pivot position</returns>
     public Vector3 ClampToBounds(Vector3 position, float footOffsetY) {
-        Vector3 offsetPosition = new(position.x, position.y + footOffsetY, position.z);
-        if (IsWithinBounds(offsetPosition)) {
+        Vector3 footPosition = new(position.x, position.y + footOffsetY, position.z);
+        
+        if (IsWithinBounds(footPosition)) {
             return position;
         }
         
-        Vector2 point2D = new(offsetPosition.x, offsetPosition.y);
-        Vector2 closestPoint = boundsCollider.ClosestPoint(point2D);
+        Vector2 footPoint = new(footPosition.x, footPosition.y);
+        Vector2 closestPoint = boundsCollider.ClosestPoint(footPoint);
         
-        Vector3 newPosition = new(closestPoint.x, closestPoint.y - footOffsetY, position.z);
-        return newPosition;
+        return new Vector3(closestPoint.x, closestPoint.y - footOffsetY, position.z);
     }
     
 #if UNITY_EDITOR
