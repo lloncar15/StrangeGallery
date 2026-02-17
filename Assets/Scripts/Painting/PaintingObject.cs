@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 /// <summary>
@@ -13,6 +12,16 @@ public class PaintingObject : MonoBehaviour {
     
     private MeshRenderer _meshRenderer;
     private Material _paintingMaterial;
+
+    private void OnEnable() {
+        GameStateManager.OnEnteredPainting += OnEnteredPainting;
+        PlayerMovementController.OnFinishedExitingPainting += OnExitedPainting;
+    }
+
+    private void OnDisable() {
+        GameStateManager.OnEnteredPainting -= OnEnteredPainting;
+        PlayerMovementController.OnFinishedExitingPainting -= OnExitedPainting;
+    }
 
     private void Awake() {
         _meshRenderer = GetComponent<MeshRenderer>();
@@ -33,19 +42,29 @@ public class PaintingObject : MonoBehaviour {
     /// <summary>
     /// Activates the painting for 2D gameplay mode - starts updating the render texture
     /// </summary>
-    public void EnterPaintingMode() {
-        if (associatedCamera != null) {
-            associatedCamera.StartRendering();
-        }
+    private void EnterPaintingMode() {
+        if (associatedCamera == null)
+            return;
+        associatedCamera.StartRendering();
     }
 
     /// <summary>
     /// Deactivates the painting when exiting 2D gameplay mode - freezes the render texture
     /// </summary>
-    public void ExitPaintingMode() {
-        if (associatedCamera != null) {
-            associatedCamera.StopRendering();
-        }
+    private void ExitPaintingMode() {
+        if (associatedCamera == null) 
+            return;
+        
+        associatedCamera.RenderOnce();
+        associatedCamera.StopRendering();
+    }
+
+    private void OnEnteredPainting(PaintingArea _) {
+        EnterPaintingMode();
+    }
+
+    private void OnExitedPainting() {
+        ExitPaintingMode();
     }
 
     private void OnDestroy() {

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Controls a camera that renders to a render texture for a painting.
+/// Controls the camera that renders to a render texture for the painting.
 /// During 3D gameplay, the camera doesn't update the render texture (frozen).
 /// During 2D gameplay, the camera updates normally every frame.
 /// </summary>
@@ -13,8 +13,8 @@ public class PaintingCameraController : MonoBehaviour {
 
     private void Start() {
         RenderOnce();
-        // _isActive = false;
-        // DisableCamera();
+        _isActive = false;
+        DisableCamera();
     }
 
     private void LateUpdate() {
@@ -27,7 +27,7 @@ public class PaintingCameraController : MonoBehaviour {
     /// <summary>
     /// Renders a single frame to the render texture
     /// </summary>
-    private void RenderOnce() {
+    public void RenderOnce() {
         renderCamera?.Render();
     }
 

@@ -5,17 +5,17 @@ using UnityEngine;
 public class PlayerMovementController : MonoBehaviour {
     [Header("References")] [SerializeField]
     private Transform cameraHolder;
-
     [SerializeField] private PlayerConfig playerConfig;
 
-    [Header("2D Movement")] [SerializeField]
-    private Transform paintingPlayerObject;
+    [Header("2D Movement")]
+    [SerializeField] private PaintingPlayerObject paintingPlayerObject;
 
     private CharacterController _characterController;
     private float _cameraPitch;
     private float _verticalVelocity;
 
     private PaintingArea _currentPaintingArea;
+    public static event Action OnFinishedExitingPainting;
 
     private void OnEnable() {
         GameStateManager.OnEnteredPainting += OnEnteredPainting;
@@ -24,7 +24,7 @@ public class PlayerMovementController : MonoBehaviour {
 
     private void OnDisable() {
         GameStateManager.OnEnteredPainting -= OnEnteredPainting;
-        GameStateManager.OnExitedPainting -= OnExitedPainting;
+        GameStateManager.OnExitedPainting += OnExitedPainting;
     }
 
     private void Awake() {
@@ -68,28 +68,34 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     /// <summary>
-    /// Handles 2D movement on the XY plane with bounds checking.
+    /// Handles 2D movement on the XY plane with bounds checking
     /// </summary>
     /// <param name="moveInput">Move input vector from the InputController</param>
     private void Handle2DMovement(Vector2 moveInput) {
         if (!_currentPaintingArea)
             return;
         
+        Transform paintingPlayerTransform = paintingPlayerObject.transform;
+        
         Vector3 movement = moveInput * (playerConfig.moveSpeed2D  * Time.deltaTime);
-        Vector3 newPosition = transform.position + movement;
-
-        transform.position = _currentPaintingArea.ClampToBounds(newPosition);
+        Vector3 newPosition = paintingPlayerTransform.position + movement;
+        
+        paintingPlayerTransform.position = _currentPaintingArea.ClampToBounds(newPosition, paintingPlayerObject.FootOffset);
     }
 
     private void OnEnteredPainting(PaintingArea paintingArea) {
+        _currentPaintingArea = paintingArea;
         SetInitialPlayerPositionInPainting(paintingArea.SpawnPosition);
     }
-
-    private void SetInitialPlayerPositionInPainting(Vector3 spawnPoint){
-        paintingPlayerObject.position = spawnPoint;
+    
+    private void OnExitedPainting() {
+        _currentPaintingArea = null;
+        paintingPlayerObject.gameObject.SetActive(false);
+        OnFinishedExitingPainting?.Invoke();
     }
 
-    private void OnExitedPainting() {
-        
+    private void SetInitialPlayerPositionInPainting(Vector3 spawnPoint) {
+        paintingPlayerObject.SetPositionWithOffset(spawnPoint);
+        paintingPlayerObject.gameObject.SetActive(true);
     }
 }
