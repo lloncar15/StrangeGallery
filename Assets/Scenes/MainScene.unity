@@ -287,7 +287,7 @@ GameObject:
   m_Component:
   - component: {fileID: 457970322}
   - component: {fileID: 457970323}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Painting_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,7 +450,7 @@ GameObject:
   - component: {fileID: 743441939}
   - component: {fileID: 743441942}
   - component: {fileID: 743441940}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -555,7 +555,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 64
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 89baef9508c26bc41943b0a691677a89, type: 2}
   m_TargetDisplay: 1
@@ -576,7 +576,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 845025033}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -912,7 +912,7 @@ GameObject:
   - component: {fileID: 1254923492}
   - component: {fileID: 1254923494}
   - component: {fileID: 1254923493}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1182,7 +1182,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1430203343}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FootOffset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1245,7 +1245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1945913318}
   - component: {fileID: 1945913320}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1292,7 +1292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1956352720}
   - component: {fileID: 1956352721}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1393,6 +1393,10 @@ PrefabInstance:
       propertyPath: paintingPlayerObject
       value: 
       objectReference: {fileID: 1945913320}
+    - target: {fileID: 2749333007824293952, guid: e5ad5a114924be040a5770047d1ea3a3, type: 3}
+      propertyPath: field of view
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 5900836130239596604, guid: e5ad5a114924be040a5770047d1ea3a3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

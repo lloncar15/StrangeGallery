@@ -77,7 +77,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementController
   cameraHolder: {fileID: 8733996151610176718}
   playerConfig: {fileID: 11400000, guid: 735f187eb1434624b93734c4c3f38a57, type: 2}
-  paintingPlayerObject: {fileID: 0}
+  playerSprite: {fileID: 0}
 --- !u!114 &2081085705513934286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,6 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FootstepsController
   footstepsSource: {fileID: 8083040834891767929}
   config: {fileID: 11400000, guid: 00fda2137997c774d9e16ed72e9590b4, type: 2}
+  characterController: {fileID: 5280988754638700096}
 --- !u!82 &8083040834891767929
 AudioSource:
   m_ObjectHideFlags: 0

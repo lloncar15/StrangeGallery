@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -16,15 +17,20 @@ public class PlayerMovementController : MonoBehaviour {
 
     private PlayablePaintingArea _currentPlayablePaintingArea;
     public static event Action OnFinishedExitingPainting;
+    
+    private bool _isMovingToTarget;
+    private Tween _moveTween;
 
     private void OnEnable() {
         GameStateManager.OnEnteredPainting += OnEnteredPainting;
         GameStateManager.OnExitedPainting += OnExitedPainting;
+        InputController.Test += OnTest;
     }
 
     private void OnDisable() {
         GameStateManager.OnEnteredPainting -= OnEnteredPainting;
-        GameStateManager.OnExitedPainting += OnExitedPainting;
+        GameStateManager.OnExitedPainting -= OnExitedPainting;
+        InputController.Test -= OnTest;
     }
 
     private void Awake() {
@@ -32,6 +38,10 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     private void Update() {
+        if (_isMovingToTarget) {
+            return;
+        }
+        
         Vector2 moveInput = InputController.Instance.MoveInput;
 
         GameState currentState = GameStateManager.GetCurrentState();
@@ -43,6 +53,8 @@ public class PlayerMovementController : MonoBehaviour {
             Handle2DMovement(moveInput);
         }
     }
+
+    #region 3D movement
 
     private void HandleLook() {
         Vector2 lookInput = InputController.Instance.LookInput;
@@ -66,7 +78,61 @@ public class PlayerMovementController : MonoBehaviour {
 
         _characterController.Move(direction * (playerConfig.moveSpeed * Time.deltaTime));
     }
+    
+    #endregion
 
+    #region Commanded movement
+    
+    /// <summary>
+    /// Moves the player to a target position using DOTween, bypassing player input.
+    /// Movement is state-independent and blocks all player-controlled movement until complete.
+    /// Y position is locked to the player's current Y at the time of the call.
+    /// Any existing MoveTo tween is killed before starting a new one.
+    /// </summary>
+    /// <param name="targetPosition">World position to move toward. Y component is replaced with the player's current Y.</param>
+    /// <param name="duration">Duration of the movement in seconds.</param>
+    /// <param name="ease">DOTween ease type to apply to the movement.</param>
+    /// <param name="onComplete">Callback invoked when the player reaches the target position.</param>
+    private void MoveTo(Vector3 targetPosition, float duration, Ease ease = Ease.Linear, Action onComplete = null) {
+        _moveTween?.Kill();
+        
+        Vector3 target = new(targetPosition.x, transform.position.y, targetPosition.z);
+        
+        _isMovingToTarget = true;
+        
+        _moveTween = DOTween.To(
+                () => transform.position,
+                MoveToPosition,
+                target,
+                duration)
+            .SetEase(ease)
+            .OnComplete(() => {
+                _isMovingToTarget = false;
+                _moveTween = null;
+                onComplete?.Invoke();
+            });
+    }
+    
+    /// <summary>
+    /// Moves the CharacterController to the given position by computing and applying
+    /// the delta from the current position each tween tick.
+    /// </summary>
+    /// <param name="targetPosition">The next interpolated world position provided by the DOTween setter.</param>
+    private void MoveToPosition(Vector3 targetPosition) {
+        Vector3 delta = targetPosition - transform.position;
+        _characterController.Move(delta);
+        Debug.Log("Character is moving");
+    }
+
+    private void OnTest() {
+        Vector3 pos = transform.position + Vector3.forward * 2;
+        MoveTo(pos, 0.5f);
+    }
+
+    #endregion
+
+    #region 2D movement
+    
     /// <summary>
     /// Handles 2D movement on the XY plane with bounds checking
     /// </summary>
@@ -82,6 +148,8 @@ public class PlayerMovementController : MonoBehaviour {
         
         paintingPlayerTransform.position = _currentPlayablePaintingArea.ClampToBounds(newPosition, playerSprite.FootOffset);
     }
+    
+    #endregion
 
     //TODO: this flow should probably be in GameStateManager
     private void OnEnteredPainting(PlayablePaintingArea playablePaintingArea) {

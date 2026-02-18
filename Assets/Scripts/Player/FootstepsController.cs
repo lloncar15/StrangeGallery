@@ -4,9 +4,9 @@ public class FootstepsController : MonoBehaviour {
     [Header("References")]
     [SerializeField] private AudioSource footstepsSource;
     [SerializeField] private FootstepsConfig config;
+    [SerializeField] private CharacterController characterController;
 
     private float _stepTimer;
-    private int _currentFootstepIndex;
     private int _footstepCount;
     
     private const float MOVEMENT_THRESHOLD = 0.01f;
@@ -19,10 +19,11 @@ public class FootstepsController : MonoBehaviour {
         HandleFootsteps();
     }
     
+    /// <summary>
+    /// Checks wether it should play footsteps depending on the CharacterController movement and step timer
+    /// </summary>
     private void HandleFootsteps() {
-        Vector2 moveInput = InputController.Instance.MoveInput;
-        
-        bool isMoving = moveInput.sqrMagnitude > MOVEMENT_THRESHOLD;
+        bool isMoving = characterController.velocity.magnitude > MOVEMENT_THRESHOLD;
         if (!isMoving) {
             _stepTimer = 0f;
             return;
@@ -35,9 +36,12 @@ public class FootstepsController : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Plays footstep sounds in different pitches
+    /// </summary>
     private void PlayFootStep() {
         footstepsSource.pitch = Random.Range(config.pitchRange.x, config.pitchRange.y);
-        SoundController.Instance.PlaySound(footstepsSource, config.footstepsSounds[_currentFootstepIndex]);
-        _currentFootstepIndex = (_currentFootstepIndex + 1) % _footstepCount;
+        int footstepIndex = Random.Range(0, _footstepCount);
+        SoundController.Instance.PlaySound(footstepsSource, config.footstepsSounds[footstepIndex]);
     }
 }
