@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 418dd2102d044a90970ae5072108756c, type: 3}
   m_Name: Painting_01
   m_EditorClassIdentifier: Assembly-CSharp::PaintingCameraConfig
-  cameraHolderPosition: {x: 0, y: 0, z: 0}
-  zoomFOV: 0
-  lookingPosition: {x: 0, y: 0, z: 0}
+  lookingPosition: {x: 0, y: 0, z: 0.5}
+  cameraHolderPositionY: 0.5
+  zoomFOV: 30

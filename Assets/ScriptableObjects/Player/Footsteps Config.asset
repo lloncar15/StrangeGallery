@@ -16,5 +16,5 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8dfb7dcb19a40456b91cc409384437db, type: 3}
   - {fileID: 8300000, guid: 7298faee032794852aa7608487eface6, type: 3}
   stepInterval: 0.4
-  pitchRange: {x: 0.9, y: 1.1}
+  pitchRange: {x: 0.7, y: 1.3}
   volume: 1

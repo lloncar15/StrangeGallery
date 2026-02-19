@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a1712218314485bbc4a35469d442e4d, type: 3}
   m_Name: PlayerCameraConfig
   m_EditorClassIdentifier: Assembly-CSharp::CameraConfig
-  defaultCameraHolderYPos: {x: 0, y: 0.5, z: 0}
   defaultFOV: 80
-  zoomInDuration: 0.3
+  zoomInDuration: 0.5
   zoomInEase: 7
-  zoomOutDuration: 0.3
-  zoomOutEase: 7
+  zoomOutDuration: 0.5
+  zoomOutEase: 3
