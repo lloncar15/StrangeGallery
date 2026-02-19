@@ -90,17 +90,12 @@ public class PlayerCameraController : GenericSingleton<PlayerCameraController> {
 public void ZoomOut(Action onComplete = null) {
     KillTweens();
 
-    Debug.Log($"ZoomOut started - defaultFOV: {config.defaultFOV}, current FOV: {playerCamera.fieldOfView}, duration: {config.zoomOutDuration}");
-
     _fovTween = playerCamera
         .DOFieldOfView(config.defaultFOV, config.zoomOutDuration)
         .SetEase(config.zoomOutEase)
         .OnComplete(() => {
-            Debug.Log("ZoomOut OnComplete fired");
             onComplete?.Invoke();
         });
-
-    Debug.Log($"_fovTween state after creation: {_fovTween?.IsActive()}, isPlaying: {_fovTween?.IsPlaying()}");
     
     _rotationTween = cameraHolder
         .DOLocalRotateQuaternion(_originalCameraHolderRotation, config.zoomOutDuration)

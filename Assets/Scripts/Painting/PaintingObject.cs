@@ -9,7 +9,11 @@ public class PaintingObject : MonoBehaviour {
     [Header("References")]
     [SerializeField] private RenderTexture paintingRenderTexture;
     [SerializeField] private PaintingCameraController associatedCamera;
-    [SerializeField] public PaintingCameraConfig cameraConfig;
+    [SerializeField] private PaintingCameraConfig cameraConfig;
+    [SerializeField] private PlayablePaintingArea paintingArea;
+    
+    public PaintingCameraConfig CameraConfig => cameraConfig;
+    public PlayablePaintingArea PaintingArea => paintingArea;
     
     private MeshRenderer _meshRenderer;
     private Material _paintingMaterial;

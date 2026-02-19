@@ -9,6 +9,8 @@ public class InputController : PersistentSingleton<InputController> {
     public Vector2 LookInput {get; private set;}
 
     public static Action Test;
+    public static Action OnInteractPressed;
+    public static Action OnExitPressed;
     
     protected override void Awake() {
         _inputActions = new PlayerInputActions();
@@ -20,13 +22,20 @@ public class InputController : PersistentSingleton<InputController> {
         _inputActions.UI.Enable();
         _inputActions.Player.Enable();
 
+        _inputActions.Player.Interact.performed += OnInteract;
+        _inputActions.Player.Exit.performed += OnExit;
         _inputActions.Player.Test.performed += OnTest;
     }
 
     private void OnDisable() {
-        _inputActions.Player.Test.performed -= OnTest;
+        if (_inputActions == null) 
+            return;
         
-        _inputActions?.Disable();
+        _inputActions.Player.Test.performed -= OnTest;
+        _inputActions.Player.Interact.performed -= OnInteract;
+        _inputActions.Player.Exit.performed -= OnExit;
+        
+        _inputActions.Disable();
     }
 
     private void Update() {
@@ -35,6 +44,14 @@ public class InputController : PersistentSingleton<InputController> {
 
     private void OnTest(InputAction.CallbackContext ctx) {
         Test?.Invoke();
+    }
+
+    private void OnExit(InputAction.CallbackContext ctx) {
+        OnExitPressed?.Invoke();
+    }
+
+    private void OnInteract(InputAction.CallbackContext ctx) {
+        OnInteractPressed?.Invoke();
     }
 
     private void HandleMoveInputs() {

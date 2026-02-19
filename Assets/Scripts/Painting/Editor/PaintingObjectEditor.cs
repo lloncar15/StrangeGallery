@@ -17,7 +17,7 @@ public class PaintingObjectEditor : Editor {
         // Draw default PaintingObject inspector
         DrawDefaultInspector();
 
-        PaintingCameraConfig config = _paintingObject.cameraConfig;
+        PaintingCameraConfig config = _paintingObject.CameraConfig;
         if (!config) {
             EditorGUILayout.HelpBox("Assign a Painting Camera Config asset to edit its values here.", MessageType.Info);
             return;
