@@ -3,7 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMovementController : MonoBehaviour {
+public class PlayerMovementController : GenericSingleton<PlayerMovementController> {
     [Header("References")] [SerializeField]
     private Transform cameraHolder;
     [SerializeField] private PlayerConfig playerConfig;
@@ -16,24 +16,19 @@ public class PlayerMovementController : MonoBehaviour {
     private float _verticalVelocity;
 
     private PlayablePaintingArea _currentPlayablePaintingArea;
-    public static event Action OnFinishedExitingPainting;
     
     private bool _isMovingToTarget;
     private Tween _moveTween;
 
     private void OnEnable() {
-        GameStateManager.OnEnteredPainting += OnEnteredPainting;
-        GameStateManager.OnExitedPainting += OnExitedPainting;
-        InputController.Test += OnTest;
     }
 
     private void OnDisable() {
-        GameStateManager.OnEnteredPainting -= OnEnteredPainting;
-        GameStateManager.OnExitedPainting -= OnExitedPainting;
-        InputController.Test -= OnTest;
     }
 
-    private void Awake() {
+    protected override void Awake() {
+        base.Awake();
+        
         _characterController = GetComponent<CharacterController>();
     }
 
@@ -92,8 +87,8 @@ public class PlayerMovementController : MonoBehaviour {
     /// <param name="targetPosition">World position to move toward. Y component is replaced with the player's current Y.</param>
     /// <param name="duration">Duration of the movement in seconds.</param>
     /// <param name="ease">DOTween ease type to apply to the movement.</param>
-    /// <param name="onComplete">Callback invoked when the player reaches the target position.</param>
-    private void MoveTo(Vector3 targetPosition, float duration, Ease ease = Ease.Linear, Action onComplete = null) {
+    /// <param name="paintingArea">The painting area we are gonna enter.</param>
+    public void MoveTo(Vector3 targetPosition, float duration, Ease ease = Ease.Linear, PlayablePaintingArea paintingArea = null) {
         _moveTween?.Kill();
         
         Vector3 target = new(targetPosition.x, transform.position.y, targetPosition.z);
@@ -109,7 +104,7 @@ public class PlayerMovementController : MonoBehaviour {
             .OnComplete(() => {
                 _isMovingToTarget = false;
                 _moveTween = null;
-                onComplete?.Invoke();
+                EnterPainting(paintingArea);
             });
     }
     
@@ -121,12 +116,6 @@ public class PlayerMovementController : MonoBehaviour {
     private void MoveToPosition(Vector3 targetPosition) {
         Vector3 delta = targetPosition - transform.position;
         _characterController.Move(delta);
-        Debug.Log("Character is moving");
-    }
-
-    private void OnTest() {
-        Vector3 pos = transform.position + Vector3.forward * 2;
-        MoveTo(pos, 0.5f);
     }
 
     #endregion
@@ -151,16 +140,17 @@ public class PlayerMovementController : MonoBehaviour {
     
     #endregion
 
-    //TODO: this flow should probably be in GameStateManager
-    private void OnEnteredPainting(PlayablePaintingArea playablePaintingArea) {
-        _currentPlayablePaintingArea = playablePaintingArea;
-        playerSprite.SetInitialPlayerPositionInPainting(playablePaintingArea.SpawnPosition);
+    #region Painting Flow
+
+    private void EnterPainting(PlayablePaintingArea paintingArea) {
+        _currentPlayablePaintingArea = paintingArea;
+        playerSprite.SetInitialPlayerPositionInPainting(paintingArea.SpawnPosition);
     }
-    
-    //TODO: this flow should probably be in GameStateManager
-    private void OnExitedPainting() {
+
+    public void ExitPainting() {
         _currentPlayablePaintingArea = null;
         playerSprite.OnExitedPainting();
-        OnFinishedExitingPainting?.Invoke();
     }
+
+    #endregion
 }

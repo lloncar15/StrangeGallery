@@ -9,18 +9,19 @@ public class PaintingObject : MonoBehaviour {
     [Header("References")]
     [SerializeField] private RenderTexture paintingRenderTexture;
     [SerializeField] private PaintingCameraController associatedCamera;
+    [SerializeField] public PaintingCameraConfig cameraConfig;
     
     private MeshRenderer _meshRenderer;
     private Material _paintingMaterial;
 
     private void OnEnable() {
         GameStateManager.OnEnteredPainting += OnEnteredPainting;
-        PlayerMovementController.OnFinishedExitingPainting += OnExitedPainting;
+        GameStateManager.OnExitedPainting += OnExitedPainting;
     }
 
     private void OnDisable() {
         GameStateManager.OnEnteredPainting -= OnEnteredPainting;
-        PlayerMovementController.OnFinishedExitingPainting -= OnExitedPainting;
+        GameStateManager.OnExitedPainting -= OnExitedPainting;
     }
 
     private void Awake() {
@@ -37,6 +38,8 @@ public class PaintingObject : MonoBehaviour {
         };
         
         _meshRenderer.material = _paintingMaterial;
+        _meshRenderer.material.mainTextureScale = 
+            new Vector2(associatedCamera.viewportRect.width, associatedCamera.viewportRect.height);
     }
     
     /// <summary>
@@ -71,4 +74,39 @@ public class PaintingObject : MonoBehaviour {
         if (_paintingMaterial)
             Destroy(_paintingMaterial);
     }
+    
+#if UNITY_EDITOR
+    private void OnDrawGizmos() {
+        if (!cameraConfig)
+            return;
+
+        const float playerPostionY = 1f;
+        // The world point from which the camera will look at the painting:
+        // X and Z from lookingPosition, Y from cameraHolderPosition (the camera child offset)
+        Vector3 cameraWorldPoint = new(
+            cameraConfig.lookingPosition.x,
+            cameraConfig.cameraHolderPositionY + playerPostionY,
+            cameraConfig.lookingPosition.z);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawSphere(cameraWorldPoint, 0.1f);
+
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
+            return;
+
+        float aspect = mainCamera.aspect;
+        float drawDistance = Vector3.Distance(cameraWorldPoint, transform.position);
+        
+        // Draw the FOV frustum looking from the camera world point toward the painting
+        Vector3 directionToPainting = (transform.position - cameraWorldPoint).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(directionToPainting);
+        
+        Matrix4x4 originalMatrix = Gizmos.matrix;
+        Gizmos.matrix = Matrix4x4.TRS(cameraWorldPoint, lookRotation, Vector3.one);
+        Gizmos.color = new Color(1f, 1f, 0f, 0.3f);
+        Gizmos.DrawFrustum(Vector3.zero, cameraConfig.zoomFOV, drawDistance, 0.01f, aspect);
+        Gizmos.matrix = originalMatrix;
+    }
+#endif
 }

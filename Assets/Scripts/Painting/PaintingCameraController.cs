@@ -9,9 +9,13 @@ public class PaintingCameraController : MonoBehaviour {
     [Header("References")]
     [SerializeField] private Camera renderCamera;
     
+    [Header("Camera Settings")]
+    [SerializeField] public Rect viewportRect;
+    
     private bool _isActive;
 
     private void Start() {
+        renderCamera.rect = viewportRect;
         RenderOnce();
         _isActive = false;
         DisableCamera();
@@ -35,6 +39,7 @@ public class PaintingCameraController : MonoBehaviour {
     /// Starts continuous rendering to the render texture (2D gameplay mode)
     /// </summary>
     public void StartRendering() {
+        renderCamera.rect = viewportRect;
         _isActive = true;
         EnableCamera();
     }
