@@ -566,6 +566,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PaintRemove",
+                    "type": "Button",
+                    "id": "966af1c3-e1c3-49b3-98cb-70a4669660a3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -731,6 +740,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6b803866-489a-41ac-b5c7-dec92765bdf6",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PaintRemove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

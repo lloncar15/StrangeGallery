@@ -12,6 +12,9 @@ public class InputController : PersistentSingleton<InputController> {
     public static Action OnInteractPressed;
     public static Action OnExitPressed;
     
+    public static event Action OnPaintInteract;
+    public static event Action OnPaintRemove;
+    
     protected override void Awake() {
         _inputActions = new PlayerInputActions();
         HideCursor();
@@ -25,6 +28,9 @@ public class InputController : PersistentSingleton<InputController> {
         _inputActions.Player.Interact.performed += OnInteract;
         _inputActions.Player.Exit.performed += OnExit;
         _inputActions.Player.Test.performed += OnTest;
+
+        _inputActions.Player.Interact.performed += OnInteractPerformed;
+        _inputActions.Player.PaintRemove.performed += OnPaintRemovePerformed;
     }
 
     private void OnDisable() {
@@ -34,6 +40,9 @@ public class InputController : PersistentSingleton<InputController> {
         _inputActions.Player.Test.performed -= OnTest;
         _inputActions.Player.Interact.performed -= OnInteract;
         _inputActions.Player.Exit.performed -= OnExit;
+        
+        _inputActions.Player.Interact.performed -= OnInteractPerformed;
+        _inputActions.Player.PaintRemove.performed -= OnPaintRemovePerformed;
         
         _inputActions.Disable();
     }
@@ -62,5 +71,13 @@ public class InputController : PersistentSingleton<InputController> {
     private static void HideCursor() {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+    
+    private void OnInteractPerformed(InputAction.CallbackContext ctx) {
+        OnPaintInteract?.Invoke();
+    }
+
+    private void OnPaintRemovePerformed(InputAction.CallbackContext ctx) {
+        OnPaintRemove?.Invoke();
     }
 }
