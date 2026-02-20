@@ -6,6 +6,9 @@ public class GameStateManager : PersistentSingleton<GameStateManager> {
     [Header("State")]
     [SerializeField] private GameState currentState = GameState.FPS;
     
+    [Header("References")]
+    [SerializeField] private PlayerMovementController playerMovementController;
+    
     public static event Action<GameState> OnStateChange;
     public static event Action<PlayablePaintingArea> OnEnteredPainting;
     public static event Action OnExitedPainting;
@@ -33,7 +36,7 @@ public class GameStateManager : PersistentSingleton<GameStateManager> {
         PlayerCameraController cameraController = PlayerCameraController.Instance;
         cameraController.ZoomIntoPainting(obj.transform.position, cameraConfig);
             
-        PlayerMovementController.Instance.MoveTo(cameraConfig.lookingPosition,
+        playerMovementController.MoveTo(cameraConfig.lookingPosition,
             cameraController.config.zoomInDuration,
             cameraController.config.zoomInEase,
             obj.PaintingArea);
@@ -45,7 +48,7 @@ public class GameStateManager : PersistentSingleton<GameStateManager> {
         if (currentState != GameState.Painting)
             return;
         
-        PlayerMovementController.Instance.ExitPainting();
+        playerMovementController.ExitPainting();
         PlayerCameraController.Instance.ZoomOut(() => {
             ChangeState(GameState.FPS);
             OnExitedPainting?.Invoke();

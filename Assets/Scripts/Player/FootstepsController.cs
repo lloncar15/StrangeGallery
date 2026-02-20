@@ -1,14 +1,17 @@
 using UnityEngine;
 
+/// <summary>
+/// Handles playing footstep sounds at regular intervals while the player is moving in FPS mode.
+/// </summary>
 public class FootstepsController : MonoBehaviour {
     [Header("References")]
     [SerializeField] private AudioSource footstepsSource;
     [SerializeField] private FootstepsConfig config;
-    [SerializeField] private CharacterController characterController;
 
     private float _stepTimer;
+    private int _currentFootstepIndex;
     private int _footstepCount;
-    
+
     private const float MOVEMENT_THRESHOLD = 0.01f;
 
     private void Start() {
@@ -16,32 +19,38 @@ public class FootstepsController : MonoBehaviour {
     }
 
     private void Update() {
+        if (GameStateManager.GetCurrentState() != GameState.FPS)
+            return;
+
         HandleFootsteps();
     }
-    
+
     /// <summary>
-    /// Checks wether it should play footsteps depending on the CharacterController movement and step timer
+    /// Checks if the player is moving and advances the step timer.
+    /// Plays a footstep sound when the timer exceeds the configured interval.
     /// </summary>
     private void HandleFootsteps() {
-        bool isMoving = characterController.velocity.magnitude > MOVEMENT_THRESHOLD;
+        Vector2 moveInput = InputController.Instance.MoveInput;
+
+        bool isMoving = moveInput.sqrMagnitude > MOVEMENT_THRESHOLD;
         if (!isMoving) {
             _stepTimer = 0f;
             return;
         }
-        
+
         _stepTimer += Time.deltaTime;
         if (_stepTimer >= config.stepInterval) {
             _stepTimer = 0f;
-            PlayFootStep();
+            PlayFootstep();
         }
     }
 
     /// <summary>
-    /// Plays footstep sounds in different pitches
+    /// Plays the next footstep sound in the cycle with a randomized pitch.
     /// </summary>
-    private void PlayFootStep() {
+    private void PlayFootstep() {
         footstepsSource.pitch = Random.Range(config.pitchRange.x, config.pitchRange.y);
-        int footstepIndex = Random.Range(0, _footstepCount);
-        SoundController.Instance.PlaySound(footstepsSource, config.footstepsSounds[footstepIndex]);
+        SoundController.Instance.PlayOneShotSfx(footstepsSource, config.footstepsSounds[_currentFootstepIndex]);
+        _currentFootstepIndex = (_currentFootstepIndex + 1) % _footstepCount;
     }
 }
