@@ -1,7 +1,10 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
+/// <summary>
+/// Manages game state transitions including FPS, Painting, and Paused states.
+/// Subscribes to InputController events to handle state changes.
+/// </summary>
 public class GameStateManager : PersistentSingleton<GameStateManager> {
     [Header("State")]
     [SerializeField] private GameState currentState = GameState.FPS;
@@ -13,16 +16,20 @@ public class GameStateManager : PersistentSingleton<GameStateManager> {
     public static event Action<PlayablePaintingArea> OnEnteredPainting;
     public static event Action OnExitedPainting;
     
+    private GameState _stateBeforePause;
+    
     public static GameState GetCurrentState() => Instance.currentState;
 
     private void OnEnable() {
         InputController.Test += OnTest;
         InputController.OnExitPressed += ExitPainting;
+        InputController.OnPausePressed += TogglePause;
     }
 
     private void OnDisable() {
         InputController.Test -= OnTest;
         InputController.OnExitPressed -= ExitPainting;
+        InputController.OnPausePressed -= TogglePause;
     }
 
     private void OnTest() {
@@ -55,14 +62,43 @@ public class GameStateManager : PersistentSingleton<GameStateManager> {
         });
     }
 
+    /// <summary>
+    /// Toggles pause on/off. Stores the pre-pause state to restore on unpause.
+    /// Sets Time.timeScale to 0 when paused, 1 when unpaused.
+    /// </summary>
+    public void TogglePause() {
+        if (currentState == GameState.Paused) {
+            Time.timeScale = 1f;
+            InputController.DisableCursor();
+            ChangeState(_stateBeforePause);
+        }
+        else {
+            _stateBeforePause = currentState;
+            Time.timeScale = 0f;
+            InputController.EnableCursor();
+            ChangeState(GameState.Paused);
+        }
+    }
+
+    /// <summary>
+    /// Forces unpause without toggling. Used when transitioning scenes from pause menu.
+    /// </summary>
+    public void ForceUnpause() {
+        if (currentState != GameState.Paused)
+            return;
+        
+        Time.timeScale = 1f;
+        ChangeState(_stateBeforePause);
+    }
+
     private void ChangeState(GameState state) {
         currentState = state;
-        
         OnStateChange?.Invoke(currentState);
     }
 }
 
 public enum GameState {
     FPS,
-    Painting
+    Painting,
+    Paused
 }

@@ -8,16 +8,17 @@ public class InputController : PersistentSingleton<InputController> {
     public Vector2 MoveInput {get; private set;}
     public Vector2 LookInput {get; private set;}
 
-    public static Action Test;
-    public static Action OnInteractPressed;
-    public static Action OnExitPressed;
+    public static event Action Test;
+    public static event Action OnInteractPressed;
+    public static event Action OnExitPressed;
+    public static event Action OnPausePressed;
     
     public static event Action OnPaintInteract;
     public static event Action OnPaintRemove;
     
     protected override void Awake() {
         _inputActions = new PlayerInputActions();
-        HideCursor();
+        EnableCursor();
         base.Awake();
     }
     
@@ -27,6 +28,7 @@ public class InputController : PersistentSingleton<InputController> {
 
         _inputActions.Player.Interact.performed += OnInteract;
         _inputActions.Player.Exit.performed += OnExit;
+        _inputActions.Player.Pause.performed += OnPause;
         _inputActions.Player.Test.performed += OnTest;
 
         _inputActions.Player.Interact.performed += OnInteractPerformed;
@@ -40,6 +42,7 @@ public class InputController : PersistentSingleton<InputController> {
         _inputActions.Player.Test.performed -= OnTest;
         _inputActions.Player.Interact.performed -= OnInteract;
         _inputActions.Player.Exit.performed -= OnExit;
+        _inputActions.Player.Pause.performed -= OnPause;
         
         _inputActions.Player.Interact.performed -= OnInteractPerformed;
         _inputActions.Player.PaintRemove.performed -= OnPaintRemovePerformed;
@@ -61,6 +64,10 @@ public class InputController : PersistentSingleton<InputController> {
     private void OnExit(InputAction.CallbackContext ctx) {
         OnExitPressed?.Invoke();
     }
+    
+    private void OnPause(InputAction.CallbackContext ctx) {
+        OnPausePressed?.Invoke();
+    }
 
     private void OnInteract(InputAction.CallbackContext ctx) {
         OnInteractPressed?.Invoke();
@@ -77,7 +84,7 @@ public class InputController : PersistentSingleton<InputController> {
     /// <summary>
     /// Locks and hides the cursor for FPS gameplay.
     /// </summary>
-    private static void HideCursor() {
+    public static void EnableCursor() {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -85,7 +92,7 @@ public class InputController : PersistentSingleton<InputController> {
     /// <summary>
     /// Unlocks and shows the cursor.
     /// </summary>
-    private static void ShowCursor() {
+    public static void DisableCursor() {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
