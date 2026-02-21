@@ -19,12 +19,12 @@ public class NpcRoamState : INpcState {
         }
 
         Vector2 currentPosition = npc.transform.position;
-        Vector2 direction = (_targetPosition - currentPosition).normalized;
         float step = npc.Movement.CurrentSpeed * Time.deltaTime;
 
-        npc.transform.position = Vector2.MoveTowards(currentPosition, _targetPosition, step);
+        Vector2 newPosition = Vector2.MoveTowards(currentPosition, _targetPosition, step);
+        npc.transform.position = npc.PaintingArea.ClampToBounds(newPosition, 0f);
 
-        if (Vector2.Distance(currentPosition, _targetPosition) <= ARRIVAL_THRESHOLD) {
+        if (Vector2.Distance(newPosition, _targetPosition) <= ARRIVAL_THRESHOLD) {
             _hasTarget = false;
             npc.TransitionTo(npc.IdleState);
         }

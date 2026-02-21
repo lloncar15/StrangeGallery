@@ -2,8 +2,7 @@ using System;
 using UnityEngine;
 
 public class NpcHealthComponent : MonoBehaviour {
-    [SerializeField] private int maxHealth = 3;
-
+    private int _maxHealth;
     private int _currentHealth;
 
     public event Action OnDeath;
@@ -11,7 +10,13 @@ public class NpcHealthComponent : MonoBehaviour {
 
     public bool IsDead => _currentHealth <= 0;
 
-    private void Awake() {
+    /// <summary>
+    /// Initializes health with the given max value.
+    /// Must be called before any damage is dealt.
+    /// </summary>
+    /// <param name="maxHealth">Maximum and starting health.</param>
+    public void Initialize(int maxHealth) {
+        _maxHealth = maxHealth;
         _currentHealth = maxHealth;
     }
 

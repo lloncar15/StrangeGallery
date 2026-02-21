@@ -113,7 +113,7 @@ public class PaintableSprite : MonoBehaviour {
         Color blended = Color.black;
         foreach (ColorType colorType in _assignedColors) {
             ColorEffectData data = availableEffectData.Find(d => d.colorType == colorType);
-            if (data != null)
+            if (data)
                 blended += data.displayColor;
         }
 

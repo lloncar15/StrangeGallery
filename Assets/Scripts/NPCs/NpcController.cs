@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NpcController : MonoBehaviour {
+public class NpcController : MonoBehaviour, IColorAffectable {
     [Header("Config")]
     [SerializeField] private NpcStateData stateData;
 
@@ -14,6 +14,7 @@ public class NpcController : MonoBehaviour {
     public NpcMovementComponent Movement { get; private set; }
     public PlayablePaintingArea PaintingArea { get; private set; }
     public Vector2 SpawnPosition { get; private set; }
+    public Transform Transform => transform;
 
     public NpcIdleState IdleState { get; } = new();
     public NpcRoamState RoamState { get; } = new();
@@ -35,7 +36,8 @@ public class NpcController : MonoBehaviour {
         PaintingArea = paintingArea;
         SpawnPosition = transform.position;
 
-        Movement.Initialize(stateData.moveSpeed);
+        Health.Initialize(stateData.maxHealth);
+        Movement.Initialize(stateData.moveSpeed, paintingArea);
 
         Health.OnDeath += OnDeath;
 
@@ -72,4 +74,15 @@ public class NpcController : MonoBehaviour {
         if (Health != null)
             Health.OnDeath -= OnDeath;
     }
+
+    #region IColorAffectable
+
+    public void TakeDamage(int amount) => Health.TakeDamage(amount);
+    public void InstantKill() => Health.InstantKill();
+    public void ApplySlow(float factor) => Movement.ApplySlow(factor);
+    public void RemoveSlow() => Movement.RemoveSlow();
+    public void ApplyKnockback(Vector2 sourcePosition, float force) =>
+        Movement.ApplyKnockback(sourcePosition, force);
+
+    #endregion
 }

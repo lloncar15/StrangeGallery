@@ -7,6 +7,7 @@ public class ColorAssignmentController : MonoBehaviour {
     [Header("References")]
     [SerializeField] private Camera paintingCamera;
     [SerializeField] private ColorPaletteUI colorPaletteUI;
+    [SerializeField] private CollectedColors collectedColors;
 
     private List<PaintableSprite> _paintableSprites;
     private ColorType _selectedColor = ColorType.None;
@@ -17,7 +18,7 @@ public class ColorAssignmentController : MonoBehaviour {
     private void OnEnable() {
         ColorPaletteUI.OnColorSelected += OnColorSelected;
         ColorPaletteUI.OnLockInPressed += OnLockInPressed;
-        
+
         InputController.OnPaintInteract += TryPaintAtMousePosition;
         InputController.OnPaintRemove += TryRemoveColorsAtMousePosition;
     }
@@ -25,7 +26,7 @@ public class ColorAssignmentController : MonoBehaviour {
     private void OnDisable() {
         ColorPaletteUI.OnColorSelected -= OnColorSelected;
         ColorPaletteUI.OnLockInPressed -= OnLockInPressed;
-        
+
         InputController.OnPaintInteract -= TryPaintAtMousePosition;
         InputController.OnPaintRemove -= TryRemoveColorsAtMousePosition;
     }
@@ -52,46 +53,52 @@ public class ColorAssignmentController : MonoBehaviour {
         _selectedColor = ColorType.None;
     }
 
-    private void Update() {
-        if (!_isActive) return;
-        if (_selectedColor == ColorType.None) return;
-
-        if (Input.GetMouseButtonDown(0))
-            TryPaintAtMousePosition();
-    }
-
     /// <summary>
     /// Raycasts from the painting camera at the mouse position to find a PaintableSprite.
-    /// If found, assigns the currently selected color to it.
+    /// If found and the player has the selected color available, assigns it and spends the color.
     /// </summary>
     private void TryPaintAtMousePosition() {
         if (!_isActive || _selectedColor == ColorType.None) return;
 
-        Vector2 worldPoint = paintingCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+        PaintableSprite sprite = RaycastForPaintableSprite();
+        if (sprite == null) return;
 
-        if (!hit.collider) return;
-        if (!hit.collider.TryGetComponent(out PaintableSprite sprite)) return;
-        if (!_paintableSprites.Contains(sprite)) return;
+        if (!collectedColors.SpendColor(_selectedColor)) return;
 
         sprite.AssignColor(_selectedColor);
     }
 
     /// <summary>
     /// Raycasts from the painting camera at the mouse position to find a PaintableSprite.
-    /// If found, clears all assigned colors from it immediately.
+    /// If found, refunds each assigned color back to inventory and clears the sprite.
     /// </summary>
     private void TryRemoveColorsAtMousePosition() {
         if (!_isActive) return;
 
+        PaintableSprite sprite = RaycastForPaintableSprite();
+        if (sprite == null) return;
+
+        List<ColorType> colors = sprite.GetAssignedColors();
+        foreach (ColorType color in colors)
+            collectedColors.RefundColor(color);
+
+        sprite.ClearColors();
+    }
+
+    /// <summary>
+    /// Raycasts from the painting camera at the mouse position and returns the hit PaintableSprite,
+    /// or null if none was found or it isn't in the allowed list.
+    /// </summary>
+    /// <returns>The hit PaintableSprite, or null.</returns>
+    private PaintableSprite RaycastForPaintableSprite() {
         Vector2 worldPoint = paintingCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
 
-        if (!hit.collider) return;
-        if (!hit.collider.TryGetComponent(out PaintableSprite sprite)) return;
-        if (!_paintableSprites.Contains(sprite)) return;
+        if (!hit.collider) return null;
+        if (!hit.collider.TryGetComponent(out PaintableSprite sprite)) return null;
+        if (!_paintableSprites.Contains(sprite)) return null;
 
-        sprite.ClearColors();
+        return sprite;
     }
 
     private void OnColorSelected(ColorType colorType) {

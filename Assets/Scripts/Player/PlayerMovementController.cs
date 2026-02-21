@@ -122,18 +122,20 @@ public class PlayerMovementController : GenericSingleton<PlayerMovementControlle
     #region 2D movement
     
     /// <summary>
-    /// Handles 2D movement on the XY plane with bounds checking
+    /// Handles 2D movement on the XY plane with bounds checking.
+    /// Applies the player sprite's speed multiplier (affected by blue slow effect).
     /// </summary>
-    /// <param name="moveInput">Move input vector from the InputController</param>
+    /// <param name="moveInput">Move input vector from the InputController.</param>
     private void Handle2DMovement(Vector2 moveInput) {
         if (!_currentPlayablePaintingArea)
             return;
-        
+    
         Transform paintingPlayerTransform = playerSprite.transform;
-        
-        Vector3 movement = moveInput * (playerConfig.moveSpeed2D  * Time.deltaTime);
+    
+        float speed = playerConfig.moveSpeed2D * playerSprite.SpeedMultiplier;
+        Vector3 movement = moveInput * (speed * Time.deltaTime);
         Vector3 newPosition = paintingPlayerTransform.position + movement;
-        
+    
         paintingPlayerTransform.position = _currentPlayablePaintingArea.ClampToBounds(newPosition, playerSprite.FootOffset);
     }
     
