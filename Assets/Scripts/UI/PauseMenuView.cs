@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// Listens to GameStateManager state changes to show/hide.
 /// Contains settings controls and a back-to-menu button.
 /// </summary>
-public class PauseMenuController : MonoBehaviour {
+public class PauseMenuView : MonoBehaviour {
     [Header("References")]
     [SerializeField] private RectTransform panelRoot;
     [SerializeField] private Button backToMenuButton;

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// Manages settings UI bindings for volume controls.
 /// Reads current values from SoundController on enable and pushes slider changes back.
 /// </summary>
-public class SettingsController : MonoBehaviour {
+public class SettingsView : MonoBehaviour {
     [Header("Volume Sliders")]
     [SerializeField] private Slider masterVolumeSlider;
     [SerializeField] private Slider musicVolumeSlider;
