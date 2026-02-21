@@ -9,6 +9,9 @@ public class ColorEffectData : ScriptableObject {
     [Header("Red Settings")]
     public int damageAmount = 1;
 
+    [Header("Yellow Settings")]
+    public float knockbackForce = 5f;
+
     [Header("Blue Settings")]
     [Range(0f, 1f)] public float slowFactor = 0.5f;
 

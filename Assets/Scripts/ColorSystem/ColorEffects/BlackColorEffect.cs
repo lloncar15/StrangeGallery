@@ -1,11 +1,14 @@
+/// <summary>
+/// Instantly kills any target on enter.
+/// </summary>
 public class BlackColorEffect : IColorEffect {
     public ColorType ColorType => ColorType.Black;
 
     /// <inheritdoc/>
-    public void OnEnter(NpcController npc) {
-        // npc.Health.InstantKill();
+    public void OnEnter(IColorAffectable target) {
+        target.InstantKill();
     }
 
     /// <inheritdoc/>
-    public void OnExit(NpcController npc) { }
+    public void OnExit(IColorAffectable target) { }
 }

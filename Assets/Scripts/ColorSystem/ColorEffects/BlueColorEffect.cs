@@ -1,3 +1,6 @@
+/// <summary>
+/// Slows targets while they remain inside the trigger.
+/// </summary>
 public class BlueColorEffect : IColorEffect {
     public ColorType ColorType => ColorType.Blue;
 
@@ -8,12 +11,12 @@ public class BlueColorEffect : IColorEffect {
     }
 
     /// <inheritdoc/>
-    public void OnEnter(NpcController npc) {
-        // npc.Movement.ApplySlow(_slowFactor);
+    public void OnEnter(IColorAffectable target) {
+        target.ApplySlow(_slowFactor);
     }
 
     /// <inheritdoc/>
-    public void OnExit(NpcController npc) {
-        // npc.Movement.RemoveSlow();
+    public void OnExit(IColorAffectable target) {
+        target.RemoveSlow();
     }
 }

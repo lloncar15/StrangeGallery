@@ -1,3 +1,6 @@
+/// <summary>
+/// Deals damage to targets on enter.
+/// </summary>
 public class RedColorEffect : IColorEffect {
     public ColorType ColorType => ColorType.Red;
 
@@ -8,10 +11,10 @@ public class RedColorEffect : IColorEffect {
     }
 
     /// <inheritdoc/>
-    public void OnEnter(NpcController npc) {
-        // npc.Health.TakeDamage(_damageAmount);
+    public void OnEnter(IColorAffectable target) {
+        target.TakeDamage(_damageAmount);
     }
 
     /// <inheritdoc/>
-    public void OnExit(NpcController npc) { }
+    public void OnExit(IColorAffectable target) { }
 }
