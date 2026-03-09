@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerConfig
   moveSpeed: 4
   gravity: -9.81
-  lookSensitivity: 0.05
+  lookSensitivity: 0.1
   maxLookAngle: 50
   moveSpeed2D: 1

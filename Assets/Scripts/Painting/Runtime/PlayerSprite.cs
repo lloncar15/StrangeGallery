@@ -9,6 +9,7 @@ namespace Painting.Runtime {
     public class PlayerSprite : MonoBehaviour {
         [Header("References")]
         [SerializeField] private Transform footTransform;
+        [SerializeField] private SpriteRenderer spriteRenderer;
 
         private float _footOffset;
         public float FootOffset => _footOffset;
@@ -31,7 +32,7 @@ namespace Painting.Runtime {
         /// Sets the transform position directly.
         /// </summary>
         /// <param name="position">World position to set</param>
-        public void SetPosition(Vector3 position) {
+        private void SetPosition(Vector3 position) {
             transform.position = position;
         }
 
@@ -49,14 +50,14 @@ namespace Painting.Runtime {
         /// <param name="playablePaintingArea">The painting area being entered</param>
         private void OnEnteredPainting(PlayablePaintingArea playablePaintingArea) {
             SetPositionAtFoot(playablePaintingArea.SpawnPosition);
-            gameObject.SetActive(true);
+            spriteRenderer.enabled = true;
         }
 
         /// <summary>
         /// Hides the sprite when exiting a painting.
         /// </summary>
         private void OnExitedPainting() {
-            gameObject.SetActive(false);
+            spriteRenderer.enabled = false;
         }
     }
 }
