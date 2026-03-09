@@ -92,7 +92,7 @@ namespace Player {
         /// <param name="targetPosition">World position to move toward. Y component is replaced with the player's current Y.</param>
         /// <param name="duration">Duration of the movement in seconds.</param>
         /// <param name="ease">DOTween ease type to apply to the movement.</param>
-        /// <param name="paintingArea">The painting area we are gonna enter.</param>
+        /// <param name="paintingArea">The painting area we are entering.</param>
         public void MoveTo(Vector3 targetPosition, float duration, Ease ease = Ease.Linear, PlayablePaintingArea paintingArea = null) {
             _moveTween?.Kill();
         
@@ -149,12 +149,10 @@ namespace Player {
 
         private void EnterPainting(PlayablePaintingArea paintingArea) {
             _currentPlayablePaintingArea = paintingArea;
-            playerSprite.SetInitialPlayerPositionInPainting(paintingArea.SpawnPosition);
         }
 
         public void ExitPainting() {
             _currentPlayablePaintingArea = null;
-            playerSprite.OnExitedPainting();
         }
 
         #endregion

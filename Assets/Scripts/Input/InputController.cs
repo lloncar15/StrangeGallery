@@ -41,9 +41,12 @@ namespace Input {
         }
 
         private void Update() {
-            HandleMoveInputs();
+            ReadMoveInputs();
         }
 
+        /// <summary>
+        /// Forwards the test action to subscribers.
+        /// </summary>
         private void OnTest(InputAction.CallbackContext ctx) {
             Test?.Invoke();
         }
@@ -56,14 +59,28 @@ namespace Input {
             OnInteractPressed?.Invoke();
         }
 
-        private void HandleMoveInputs() {
+        /// <summary>
+        /// Reads current move and look input values from the input action asset.
+        /// </summary>
+        private void ReadMoveInputs() {
             MoveInput = _inputActions.Player.Move.ReadValue<Vector2>();
             LookInput = _inputActions.Player.Look.ReadValue<Vector2>();
         }
 
+        /// <summary>
+        /// Locks and hides the cursor for FPS gameplay.
+        /// </summary>
         private static void HideCursor() {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
+        
+        /// <summary>
+        /// Unlocks and shows the cursor.
+        /// </summary>
+        private static void ShowCursor() {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 }
