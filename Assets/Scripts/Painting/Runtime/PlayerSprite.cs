@@ -1,5 +1,7 @@
 using Core;
 using DG.Tweening;
+using Interactables;
+using Player;
 using UnityEngine;
 
 namespace Painting.Runtime {
@@ -10,6 +12,8 @@ namespace Painting.Runtime {
     public class PlayerSprite : MonoBehaviour {
         [Header("References")]
         [SerializeField] private Transform footTransform;
+        [SerializeField] private PlayerInteractionController controller;
+        
 
         private float _footOffset;
         public float FootOffset => _footOffset;
@@ -60,6 +64,14 @@ namespace Painting.Runtime {
                 .OnComplete(() => {
                     gameObject.SetActive(false);
                 });
+        }
+
+        public void OnInteractionZoneEnter(IInteractable interactable) {
+            controller.OnInteractionZoneEnter(interactable);
+        }
+
+        public void OnInteractionZoneExit() {
+            controller.OnInteractionZoneExit();
         }
     }
 }
