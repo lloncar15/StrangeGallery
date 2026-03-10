@@ -4,18 +4,18 @@ using UnityEngine.UI;
 
 namespace Inventory {
     public class ColorItemUIView : ItemUIView {
-        [SerializeField] private Image colorSprite;
         [SerializeField] private TextMeshProUGUI quantityLabel;
 
         protected override void OnInitialize(Item item) {
+            base.OnInitialize(item);
+            
             if (item.data is not ColorData colorData) 
                 return;
             
-            colorSprite.sprite = colorData.sprite;
-            colorSprite.color = colorData.color;
+            image.color = colorData.color;
         }
 
-        protected override void OnQuantityUpdated(int quantity) {
+        public override void UpdateQuantity(int quantity) {
             quantityLabel.text = $"x{quantity}";
         }
     }

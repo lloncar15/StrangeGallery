@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70bbcc84cee24c029085f908bd520b3d, type: 3}
   m_Name: TestImage
   m_EditorClassIdentifier: Assembly-CSharp::Inventory.ImageData
-  itemName: 
-  tooltipDescription: 
-  sprite: {fileID: 0}
-  iconScaleFactor: 0
-  paintingScaleFactor: 0
+  itemName: TestImage
+  tooltipDescription: This is a test image.
+  sprite: {fileID: 21300000, guid: 528a6dd601766934abb8b1053bd798ef, type: 3}
+  iconScaleFactor: 1
+  paintingScaleFactor: 1

@@ -1,18 +1,22 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Inventory {
     public abstract class ItemUIView : MonoBehaviour {
+        [SerializeField] protected Image image;
         public ItemData Data { get; private set; }
 
         public void Initialize(Item item) {
-            Data = item.data;
-            UpdateQuantity(item.quantity);
             OnInitialize(item);
+            UpdateQuantity(item.quantity);
         }
 
-        public void UpdateQuantity(int quantity) => OnQuantityUpdated(quantity);
-        
-        protected abstract void OnQuantityUpdated(int quantity);
-        protected abstract void OnInitialize(Item item);
+        public virtual void UpdateQuantity(int quantity) {}
+
+        protected virtual void OnInitialize(Item item) {
+            Data = item.data;
+            image.sprite = item.data?.sprite;
+            image.rectTransform.localScale *= Data.iconScaleFactor;
+        }
     }
 }
