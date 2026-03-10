@@ -1,4 +1,5 @@
 using Core;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Painting.Runtime {
@@ -9,20 +10,12 @@ namespace Painting.Runtime {
     public class PlayerSprite : MonoBehaviour {
         [Header("References")]
         [SerializeField] private Transform footTransform;
-        [SerializeField] private SpriteRenderer spriteRenderer;
 
         private float _footOffset;
         public float FootOffset => _footOffset;
         
-        private void OnEnable() {
-            GameStateManager.OnEnteredPainting += OnEnteredPainting;
-            GameStateManager.OnExitedPainting += OnExitedPainting;
-        }
-
-        private void OnDisable() {
-            GameStateManager.OnEnteredPainting -= OnEnteredPainting;
-            GameStateManager.OnExitedPainting -= OnExitedPainting;
-        }
+        private const float OVERSHOOT = 4f;
+        private const float SHOW_HIDE_DURATION = 0.25f;
 
         private void Awake() {
             _footOffset = footTransform.localPosition.y;
@@ -48,16 +41,25 @@ namespace Painting.Runtime {
         /// Positions the sprite at the painting's spawn point and makes it visible.
         /// </summary>
         /// <param name="playablePaintingArea">The painting area being entered</param>
-        private void OnEnteredPainting(PlayablePaintingArea playablePaintingArea) {
+        public void OnEnteredPainting(PlayablePaintingArea playablePaintingArea) {
             SetPositionAtFoot(playablePaintingArea.SpawnPosition);
-            spriteRenderer.enabled = true;
+
+            transform.localScale = Vector3.zero;
+            gameObject.SetActive(true);
+            
+            transform.DOScale(Vector3.one, SHOW_HIDE_DURATION)
+                .SetEase(Ease.OutBack, OVERSHOOT);
         }
 
         /// <summary>
         /// Hides the sprite when exiting a painting.
         /// </summary>
-        private void OnExitedPainting() {
-            spriteRenderer.enabled = false;
+        public void OnExitedPainting() {
+            transform.DOScale(Vector3.zero, SHOW_HIDE_DURATION)
+                .SetEase(Ease.InBack, OVERSHOOT)
+                .OnComplete(() => {
+                    gameObject.SetActive(false);
+                });
         }
     }
 }

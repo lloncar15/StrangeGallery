@@ -149,10 +149,12 @@ namespace Player {
 
         private void EnterPainting(PlayablePaintingArea paintingArea) {
             _currentPlayablePaintingArea = paintingArea;
+            playerSprite.OnEnteredPainting(paintingArea);
         }
 
         public void ExitPainting() {
             _currentPlayablePaintingArea = null;
+            playerSprite.OnExitedPainting();
         }
 
         #endregion
