@@ -25,7 +25,7 @@ namespace Conversations {
             if (IsDialogueRunning())
                 return false;
 
-            if (provider.CheckConditions())
+            if (!provider.CanStartDialogue())
                 return false;
             
             _activeProvider = provider;
@@ -57,7 +57,9 @@ namespace Conversations {
         private void OnDialogueEnded() {
             if (_activeProvider == null)
                 return;
+            
             DialogueEnded?.Invoke(_activeProvider);
+            _activeProvider.OnThisDialogueEnded();
             _activeProvider = null;
         }
 

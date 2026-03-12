@@ -1,6 +1,7 @@
 using System;
 using Camera;
 using Camera.Configs;
+using Conversations;
 using Input;
 using Painting.Runtime;
 using Player;
@@ -24,11 +25,15 @@ namespace Core {
         private void OnEnable() {
             InputController.Test += OnTest;
             InputController.OnExitPressed += ExitPainting;
+            YarnConversationController.DialogueStarted += OnDialogueStarted;
+            YarnConversationController.DialogueEnded += OnDialogueEnded;
         }
 
         private void OnDisable() {
             InputController.Test -= OnTest;
             InputController.OnExitPressed -= ExitPainting;
+            YarnConversationController.DialogueStarted -= OnDialogueStarted;
+            YarnConversationController.DialogueEnded -= OnDialogueEnded;
         }
 
         private void OnTest() {
@@ -66,10 +71,19 @@ namespace Core {
         
             OnStateChange?.Invoke(currentState);
         }
+
+        private void OnDialogueStarted(YarnDialogueProvider _) {
+            ChangeState(GameState.Conversation);
+        }
+
+        private void OnDialogueEnded(YarnDialogueProvider _) {
+            ChangeState(GameState.Painting);
+        }
     }
 
     public enum GameState {
         FPS,
-        Painting
+        Painting,
+        Conversation
     }
 }

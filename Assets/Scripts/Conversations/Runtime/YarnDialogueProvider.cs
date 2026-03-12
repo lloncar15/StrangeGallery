@@ -44,8 +44,8 @@ namespace Conversations {
             }
         }
 
-        public void TriggerDialogue(string nodeOverride = null) {
-            _controller.StartDialogue(this, nodeOverride);
+        public bool StartDialogue(string nodeOverride = null) {
+            return _controller.StartDialogue(this, nodeOverride);
         }
 
         public void ExitDialogue() {
@@ -56,7 +56,7 @@ namespace Conversations {
             return _strategyLookup.GetValueOrDefault(strategyId, null);
         }
 
-        public bool CheckConditions() {
+        public bool CanStartDialogue() {
             return conditions.All(condition => condition.CanStartDialogue());
         }
 
