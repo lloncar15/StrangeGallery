@@ -50,7 +50,7 @@ namespace Core {
             OnEnteredPainting?.Invoke(obj.PaintingArea);
         }
     
-        private void ExitPainting() {
+        public void ExitPainting() {
             if (currentState != GameState.Painting)
                 return;
         
