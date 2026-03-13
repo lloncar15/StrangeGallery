@@ -7,11 +7,28 @@ namespace Sound {
     public class SoundController : PersistentSingleton<SoundController> {
         [Header("Registered Audio Sources")]
         [SerializeField] private List<RegisteredAudioSource> registeredSources;
+        
+        [Header("General Audio Sources")]
+        [SerializeField] private AudioSource sfxSource;
+        [SerializeField] private AudioSource musicSource;
 
         [Header("Volume Settings")]
         [Range(0f, 1f)] public float masterVolume = 1f;
         [Range(0f, 1f)] public float musicVolume = 1f;
         [Range(0f, 1f)] public float sfxVolume = 1f;
+
+        private void Start() {
+            Register(new RegisteredAudioSource("SoundControllerSFX", SoundType.SoundEffect, sfxSource));
+            Register(new RegisteredAudioSource("SoundControllerMusic", SoundType.SoundEffect, sfxSource));
+        }
+
+        protected override void OnDestroy() {
+            if (_instance != this) 
+                return;
+            
+            UnregisterAll();
+            _instance = null;
+        }
 
         #region Registration
 
@@ -31,6 +48,10 @@ namespace Sound {
         /// <param name="source">The audio source data to unregister</param>
         public void Unregister(RegisteredAudioSource source) {
             registeredSources.Remove(source);
+        }
+
+        private void UnregisterAll() {
+            registeredSources.Clear();
         }
 
         #endregion
@@ -56,6 +77,17 @@ namespace Sound {
                 return;
 
             source.PlayOneShot(clip, GetSfxVolume());
+        }
+
+        /// <summary>
+        /// Plays a one-shot sound effect from the SoundController sfx AudioSource.
+        /// </summary>
+        /// <param name="clip">Clip to play</param>
+        public void PlayOneShotSfx(AudioClip clip) {
+            if (!clip)
+                return;
+            
+            sfxSource.PlayOneShot(clip, GetSfxVolume());
         }
 
         #endregion
@@ -146,6 +178,12 @@ namespace Sound {
         [SerializeField] public string name;
         [SerializeField] public SoundType soundType;
         [SerializeField] public AudioSource source;
+
+        public RegisteredAudioSource(string name, SoundType soundType, AudioSource source) {
+            this.name = name;
+            this.soundType = soundType;
+            this.source = source;
+        }
 
         public bool Equals(RegisteredAudioSource other) {
             return source == other.source;
