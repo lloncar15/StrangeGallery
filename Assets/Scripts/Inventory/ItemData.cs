@@ -10,5 +10,7 @@ namespace Inventory {
         public Sprite sprite;
         [Tooltip("The scaling factor applied to this item in the inventory UI.")]
         public float iconScaleFactor;
+        [Tooltip("The scaling factor applied to this item on the painting prefab.")]
+        public float paintingScaleFactor;
     }
 }

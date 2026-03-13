@@ -16,4 +16,5 @@ MonoBehaviour:
   tooltipDescription: The color of sluggishness.
   sprite: {fileID: 21300000, guid: 7e9a80d90823e4648b6cfa68e570fad1, type: 3}
   iconScaleFactor: 0.8
+  paintingScaleFactor: 0.02
   color: {r: 0, g: 0.080596924, b: 1, a: 1}
