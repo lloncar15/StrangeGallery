@@ -8,8 +8,10 @@ namespace Inventory {
         [SerializeField] private HorizontalLayoutGroup layoutGroup;
         [SerializeField] private ColorItemUIView colorItemPrefab;
         [SerializeField] private ImageItemUIView imageItemPrefab;
+        
+        private readonly List<(ItemData data, ItemUIView view)> items = new();
 
-        private readonly Dictionary<ItemData, ItemUIView> items = new();
+        private bool _isShown;
 
         private void OnEnable() {
             InventoryController.ItemAdded += OnItemAdded;
@@ -24,9 +26,14 @@ namespace Inventory {
         }
 
         private void OnItemAdded(Item item) {
+            if (!_isShown) {
+                layoutGroup.gameObject.SetActive(true);
+                _isShown = true;
+            }
+            
             ItemUIView view = CreateItemView(item);
             view.Initialize(item);
-            items[item.data] = view;
+            items.Add((item.data, view));
             SortViews();
         }
 
@@ -39,21 +46,24 @@ namespace Inventory {
         }
 
         private void OnItemQuantityChanged(Item item) {
-            if (!items.TryGetValue(item.data, out ItemUIView view))
+            (ItemData data, ItemUIView view) entry = items.FirstOrDefault(e => e.data == item.data);
+            if (entry.view == null)
                 return;
             
-            view.UpdateQuantity(item.quantity);
+            entry.view.UpdateQuantity(item.quantity);
         }
 
         private void OnItemRemoved(Item item) {
-            if (!items.Remove(item.data, out ItemUIView view))
+            int index = items.FindIndex(e => e.data == item.data);
+            if (index == -1)
                 return;
 
-            Destroy(view.gameObject);
+            items[index].view.AnimateDisappearance();
+            items.RemoveAt(index);
         }
 
         private void SortViews() {
-            List<ItemUIView> sorted = items.Values
+            List<ItemUIView> sorted = items.Select(e => e.view)
                 .OrderByDescending(v => v.Data is ColorData)
                 .ToList();
 
