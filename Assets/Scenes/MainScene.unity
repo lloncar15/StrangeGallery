@@ -1626,7 +1626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractablePainting
   paintingObject: {fileID: 900899322}
-  enterPaintingController: {fileID: 3930844729644830579}
+  paintingFlowController: {fileID: 3930844729644830579}
 --- !u!54 &1318189607
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2809,6 +2809,10 @@ PrefabInstance:
     - target: {fileID: 2236446420568658622, guid: 78f6e5a8ca3a829429a548dcee31068a, type: 3}
       propertyPath: m_Name
       value: GameStateManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3186062214902130734, guid: 78f6e5a8ca3a829429a548dcee31068a, type: 3}
+      propertyPath: currentState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3186062214902130734, guid: 78f6e5a8ca3a829429a548dcee31068a, type: 3}
       propertyPath: paintingObject

@@ -6,17 +6,17 @@ using UnityEngine;
 namespace Interactables {
     public class InteractablePainting : MonoBehaviour, IInteractable {
         [SerializeField] private PaintingObject paintingObject;
-        [SerializeField] private EnterPaintingController enterPaintingController;
+        [SerializeField] private PaintingFlowController paintingFlowController;
     
         private bool _isInRange;
         private PlayerInteractionController _controller;
     
         private void OnEnable() {
-            EnterPaintingController.OnExitedPainting += OnExitedPainting;
+            PaintingFlowController.OnExitedPainting += OnExitedPainting;
         }
 
         private void OnDisable() {
-            EnterPaintingController.OnExitedPainting -= OnExitedPainting;
+            PaintingFlowController.OnExitedPainting -= OnExitedPainting;
         }
 
         private void OnTriggerEnter(Collider other) {
@@ -55,7 +55,7 @@ namespace Interactables {
         }
 
         public void Interact() {
-            enterPaintingController.EnterPainting(paintingObject);
+            paintingFlowController.EnterPainting(paintingObject);
         }
     
         /// <summary>

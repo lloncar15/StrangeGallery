@@ -7,7 +7,7 @@ using Player;
 using UnityEngine;
 
 namespace Painting {
-    public class EnterPaintingController : MonoBehaviour {
+    public class PaintingFlowController : MonoBehaviour {
         [Header("References")]
         [SerializeField] private PlayerMovementController playerMovementController;
         
@@ -23,7 +23,7 @@ namespace Painting {
         }
         
         public void EnterPainting(PaintingObject obj) {
-            GameStateManager.Instance.ChangeState(GameState.Painting);
+            GameStateManager.ChangeState(GameState.Painting);
 
             PaintingCameraConfig cameraConfig = obj.CameraConfig;
         
@@ -39,12 +39,12 @@ namespace Painting {
         }
         
         public void ExitPainting() {
-            if (GameStateManager.GetCurrentState() != GameState.Painting)
+            if (!GameStateManager.IsInState(GameState.Painting))
                 return;
         
             playerMovementController.ExitPainting();
             PlayerCameraController.Instance.ZoomOut(() => {
-                GameStateManager.Instance.ChangeState(GameState.FPS);
+                GameStateManager.ChangeState(GameState.FPS);
                 OnExitedPainting?.Invoke();
             });
         }

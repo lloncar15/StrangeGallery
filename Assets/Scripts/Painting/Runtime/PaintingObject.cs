@@ -22,13 +22,13 @@ namespace Painting {
         private Material _paintingMaterial;
 
         private void OnEnable() {
-            EnterPaintingController.OnEnteredPainting += OnEnteredPainting;
-            EnterPaintingController.OnExitedPainting += OnExitedPainting;
+            PaintingFlowController.OnEnteredPainting += OnEnteredPainting;
+            PaintingFlowController.OnExitedPainting += OnExitedPainting;
         }
 
         private void OnDisable() {
-            EnterPaintingController.OnEnteredPainting -= OnEnteredPainting;
-            EnterPaintingController.OnExitedPainting -= OnExitedPainting;
+            PaintingFlowController.OnEnteredPainting -= OnEnteredPainting;
+            PaintingFlowController.OnExitedPainting -= OnExitedPainting;
         }
 
         private void Awake() {
