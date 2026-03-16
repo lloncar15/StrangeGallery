@@ -1,7 +1,7 @@
 using Core;
 using DG.Tweening;
 using Input;
-using Painting.Runtime;
+using Painting;
 using Player.Configs;
 using UnityEngine;
 using Utils;

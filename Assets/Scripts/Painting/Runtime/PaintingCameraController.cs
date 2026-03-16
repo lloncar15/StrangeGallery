@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Painting.Runtime {
+namespace Painting {
     /// <summary>
     /// Controls the camera that renders to a render texture for the painting.
     /// During 3D gameplay, the camera doesn't update the render texture (frozen).

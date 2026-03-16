@@ -1,6 +1,6 @@
 using System;
 using Core;
-using Painting.Runtime;
+using Painting;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -12,7 +12,7 @@ namespace Conversations {
         public override async YarnTask Execute() {
             // await player.MoveTo(targetPosition.position);
             await YarnTask.Yield();
-            GameStateManager.Instance.ExitPainting();
+            // GameStateManager.Instance.ExitPainting();
         }
     }
 }

@@ -4,7 +4,7 @@ using Interactables;
 using Player;
 using UnityEngine;
 
-namespace Painting.Runtime {
+namespace Painting {
     /// <summary>
     /// Controls the player's 2D sprite representation inside paintings.
     /// Subscribes to painting enter/exit events and manages its own visibility and positioning.

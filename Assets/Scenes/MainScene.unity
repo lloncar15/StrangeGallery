@@ -1626,6 +1626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractablePainting
   paintingObject: {fileID: 900899322}
+  enterPaintingController: {fileID: 3930844729644830579}
 --- !u!54 &1318189607
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2522,6 +2523,78 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d55a66abe42614f0bbfe1d160e494cee, type: 3}
+--- !u!1001 &3930844729644830578
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 544173733281484156, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 544173733281484156, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 544173733281484156, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 544173733281484156, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 544173733281484156, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 544173733281484156, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 544173733281484156, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 544173733281484156, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 544173733281484156, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 544173733281484156, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3344142676517455071, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: m_Name
+      value: PaintingController
+      objectReference: {fileID: 0}
+    - target: {fileID: 8941870041654439628, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+      propertyPath: playerMovementController
+      value: 
+      objectReference: {fileID: 1893961641}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+--- !u!114 &3930844729644830579 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8941870041654439628, guid: 4ffc6be9a72494431a49d82402002427, type: 3}
+  m_PrefabInstance: {fileID: 3930844729644830578}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e09cea8834eb49e9b68f1caa302490d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Painting.EnterPaintingController
 --- !u!1001 &3944144667319216072
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2883,6 +2956,7 @@ SceneRoots:
   - {fileID: 1035334659}
   - {fileID: 2552622243943592400}
   - {fileID: 3944144667319216072}
+  - {fileID: 3930844729644830578}
   - {fileID: 176924855}
   - {fileID: 410087041}
   - {fileID: 1201005199}

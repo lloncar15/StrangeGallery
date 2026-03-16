@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Painting.Runtime {
+namespace Painting {
     /// <summary>
     /// Represents and monitors the playable area for the 2d gameplay. 
     /// </summary>

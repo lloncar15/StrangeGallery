@@ -1,21 +1,22 @@
 using Core;
-using Painting.Runtime;
+using Painting;
 using Player;
 using UnityEngine;
 
 namespace Interactables {
     public class InteractablePainting : MonoBehaviour, IInteractable {
         [SerializeField] private PaintingObject paintingObject;
+        [SerializeField] private EnterPaintingController enterPaintingController;
     
         private bool _isInRange;
         private PlayerInteractionController _controller;
     
         private void OnEnable() {
-            GameStateManager.OnExitedPainting += OnExitedPainting;
+            EnterPaintingController.OnExitedPainting += OnExitedPainting;
         }
 
         private void OnDisable() {
-            GameStateManager.OnExitedPainting -= OnExitedPainting;
+            EnterPaintingController.OnExitedPainting -= OnExitedPainting;
         }
 
         private void OnTriggerEnter(Collider other) {
@@ -54,7 +55,7 @@ namespace Interactables {
         }
 
         public void Interact() {
-            GameStateManager.Instance.EnterPainting(paintingObject);
+            enterPaintingController.EnterPainting(paintingObject);
         }
     
         /// <summary>

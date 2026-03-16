@@ -1,7 +1,7 @@
 using System;
 using DG.Tweening;
 using Inventory;
-using Painting.Runtime;
+using Painting;
 using Sound;
 using UnityEngine;
 using Yarn.Unity;

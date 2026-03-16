@@ -1,8 +1,7 @@
 using Camera.Configs;
-using Painting.Runtime;
 using UnityEditor;
 
-namespace Painting.Editor {
+namespace Painting {
     [CustomEditor(typeof(PaintingObject))]
     public class PaintingObjectEditor : UnityEditor.Editor {
         private PaintingObject _paintingObject;

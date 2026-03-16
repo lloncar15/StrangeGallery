@@ -2,7 +2,7 @@ using Camera.Configs;
 using Core;
 using UnityEngine;
 
-namespace Painting.Runtime {
+namespace Painting {
     /// <summary>
     /// Represents a painting object in the world that displays a render texture.
     /// Handles the material and render texture assignment.
@@ -22,13 +22,13 @@ namespace Painting.Runtime {
         private Material _paintingMaterial;
 
         private void OnEnable() {
-            GameStateManager.OnEnteredPainting += OnEnteredPainting;
-            GameStateManager.OnExitedPainting += OnExitedPainting;
+            EnterPaintingController.OnEnteredPainting += OnEnteredPainting;
+            EnterPaintingController.OnExitedPainting += OnExitedPainting;
         }
 
         private void OnDisable() {
-            GameStateManager.OnEnteredPainting -= OnEnteredPainting;
-            GameStateManager.OnExitedPainting -= OnExitedPainting;
+            EnterPaintingController.OnEnteredPainting -= OnEnteredPainting;
+            EnterPaintingController.OnExitedPainting -= OnExitedPainting;
         }
 
         private void Awake() {

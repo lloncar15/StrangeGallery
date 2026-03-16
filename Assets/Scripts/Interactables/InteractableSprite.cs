@@ -1,6 +1,6 @@
 using Core;
 using DG.Tweening;
-using Painting.Runtime;
+using Painting;
 using Player;
 using UnityEngine;
 
