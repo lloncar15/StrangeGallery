@@ -1,10 +1,6 @@
 using System;
-using Camera;
-using Camera.Configs;
 using Conversations;
 using Input;
-using Painting;
-using Player;
 using UnityEngine;
 using Utils;
 
@@ -13,7 +9,7 @@ namespace Core {
         [Header("State")]
         [SerializeField] private GameState currentState = GameState.FPS;
         
-        public static event Action<GameState, GameState> OnStateChange;
+        public static event Action<GameState, GameState> StateChanged;
     
         /// <summary>
         /// Returns the current state flags.
@@ -49,7 +45,7 @@ namespace Core {
         private void ChangeStateInternal(GameState state) {
             GameState previous = currentState;
             currentState = state;
-            OnStateChange?.Invoke(previous, currentState);
+            StateChanged?.Invoke(previous, currentState);
         }
 
         /// <summary>
@@ -58,7 +54,9 @@ namespace Core {
         /// </summary>
         /// <param name="state">The flag to add.</param>
         private void AddStateInternal(GameState state) {
+            GameState previous = currentState;
             currentState |= state;
+            StateChanged?.Invoke(previous, currentState);
         }
 
         /// <summary>
@@ -67,7 +65,9 @@ namespace Core {
         /// </summary>
         /// <param name="state">The flag to remove.</param>
         private void RemoveStateInternal(GameState state) {
+            GameState previous = currentState;
             currentState &= ~state;
+            StateChanged?.Invoke(previous, currentState);
         }
 
         private void OnDialogueStarted(YarnDialogueProvider _) {
@@ -86,9 +86,10 @@ namespace Core {
     [Flags]
     public enum GameState {
         Paused = 1,
-        FPS = 2,
-        Painting = 4,
-        Conversation = 8,
-        EndGame = 16
+        MainGame = 2,
+        EndGame = 4,
+        FPS = 8,
+        Painting = 16,
+        Conversation = 32
     }
 }
