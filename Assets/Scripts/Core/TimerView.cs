@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -6,7 +5,13 @@ using UnityEngine;
 namespace Core {
     public class TimerView : MonoBehaviour {
         [Header("References")]
+        [SerializeField] private GameObject timerNode;
         [SerializeField] private TextMeshProUGUI timerText;
+
+        [Header("Timer Settings")]
+        [SerializeField] private int hurryUpSeconds;
+        [SerializeField] private Color defaultColor;
+        [SerializeField] private Color hurryUpColor;
         
         [Header("Animation Settings")]
         [SerializeField] private float punchScale = 0.2f;
@@ -45,19 +50,20 @@ namespace Core {
             int minutes = totalSeconds / 60;
             int seconds = totalSeconds % 60;
             timerText.text = $"{minutes}:{seconds:00}";
+            timerText.color = totalSeconds <= hurryUpSeconds ? hurryUpColor : defaultColor;
         }
 
         private void Show() {
-            gameObject.SetActive(true);
-            transform.localScale = Vector3.zero;
-            transform.DOScale(Vector3.one, punchDuration)
+            timerNode.SetActive(true);
+            timerNode.transform.localScale = Vector3.zero;
+            timerNode.transform.DOScale(Vector3.one, punchDuration)
                 .SetEase(Ease.OutBack);
         }
 
         private void Hide() {
-            transform.DOScale(Vector3.zero, punchDuration)
+            timerNode.transform.DOScale(Vector3.zero, punchDuration)
                 .SetEase(Ease.InBack)
-                .OnComplete(() => gameObject.SetActive(false));
+                .OnComplete(() => timerNode.SetActive(false));
         }
 
         private void PunchText() {

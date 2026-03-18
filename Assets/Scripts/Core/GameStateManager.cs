@@ -9,6 +9,8 @@ namespace Core {
         [SerializeField] private GameState currentState = GameState.FPS;
         
         public static event Action<GameState, GameState> StateChanged;
+        public static event Action MainGameStarted;
+        public static event Action EndGameStarted;
     
         /// <summary>
         /// Returns the current state flags.
@@ -31,6 +33,12 @@ namespace Core {
         }
 
         private void OnTest() {
+            if (IsInState(GameState.MainGame)) {
+                StartEndGame();
+            }
+            else {
+                StartMainGame();
+            }
         }
 
         /// <summary>
@@ -68,6 +76,17 @@ namespace Core {
         public static void ChangeState(GameState state) => Instance.ChangeStateInternal(state);
         public static void AddState(GameState state) => Instance.AddStateInternal(state);
         public static void RemoveState(GameState state) => Instance.RemoveStateInternal(state);
+
+        public void StartMainGame() {
+            ChangeStateInternal(GameState.MainGame);
+            AddStateInternal(GameState.FPS);
+            MainGameStarted?.Invoke();
+        }
+
+        public void StartEndGame() {
+            ChangeStateInternal(GameState.EndGame);
+            EndGameStarted?.Invoke();
+        }
     }
 
     [Flags]

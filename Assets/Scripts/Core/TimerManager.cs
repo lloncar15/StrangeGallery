@@ -10,11 +10,13 @@ namespace Core {
         public static CountdownTimer Timer;
 
         private void OnEnable() {
-            GameStateManager.StateChanged += OnStateChanged;
+            GameStateManager.MainGameStarted += OnMainGameStarted;
+            GameStateManager.EndGameStarted += OnEndGameStarted;
         }
 
         private void OnDisable() {
-            GameStateManager.StateChanged -= OnStateChanged;
+            GameStateManager.MainGameStarted -= OnMainGameStarted;
+            GameStateManager.EndGameStarted -= OnEndGameStarted;
         }
 
         private void Awake() {
@@ -29,14 +31,13 @@ namespace Core {
             Timer.Start();
         }
 
-        private void OnStateChanged(GameState previous, GameState current) {
-            if (current.HasFlag(GameState.MainGame) && !previous.HasFlag(GameState.MainGame)) {
-                StartTimer();
-            }
-            else if (current.HasFlag(GameState.EndGame) && !previous.HasFlag(GameState.EndGame)) {
-                Timer.Reset(endGameTimeInSeconds);
-                StartTimer();
-            }
+        private void OnMainGameStarted() {
+            StartTimer();
+        }
+
+        private void OnEndGameStarted() {
+            Timer.Reset(endGameTimeInSeconds);
+            StartTimer();
         }
     }
 }
