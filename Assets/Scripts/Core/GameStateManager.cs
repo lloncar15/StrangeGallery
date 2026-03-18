@@ -1,5 +1,4 @@
 using System;
-using Conversations;
 using Input;
 using UnityEngine;
 using Utils;
@@ -25,14 +24,10 @@ namespace Core {
 
         private void OnEnable() {
             InputController.Test += OnTest;
-            YarnConversationController.DialogueStarted += OnDialogueStarted;
-            YarnConversationController.DialogueEnded += OnDialogueEnded;
         }
 
         private void OnDisable() {
             InputController.Test -= OnTest;
-            YarnConversationController.DialogueStarted -= OnDialogueStarted;
-            YarnConversationController.DialogueEnded -= OnDialogueEnded;
         }
 
         private void OnTest() {
@@ -69,14 +64,6 @@ namespace Core {
             currentState &= ~state;
             StateChanged?.Invoke(previous, currentState);
         }
-
-        private void OnDialogueStarted(YarnDialogueProvider _) {
-            AddStateInternal(GameState.Conversation);
-        }
-
-        private void OnDialogueEnded(YarnDialogueProvider _) {
-            RemoveStateInternal(GameState.Conversation);
-        }
         
         public static void ChangeState(GameState state) => Instance.ChangeStateInternal(state);
         public static void AddState(GameState state) => Instance.AddStateInternal(state);
@@ -89,7 +76,6 @@ namespace Core {
         MainGame = 2,
         EndGame = 4,
         FPS = 8,
-        Painting = 16,
-        Conversation = 32
+        Painting = 16
     }
 }

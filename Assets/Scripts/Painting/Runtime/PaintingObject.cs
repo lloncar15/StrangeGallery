@@ -22,13 +22,13 @@ namespace Painting {
         private Material _paintingMaterial;
 
         private void OnEnable() {
-            PaintingFlowController.OnEnteredPainting += OnEnteredPainting;
-            PaintingFlowController.OnExitedPainting += OnExitedPainting;
+            PaintingFlowController.EnteredPainting += EnteredPainting;
+            PaintingFlowController.ExitedPainting += ExitedPainting;
         }
 
         private void OnDisable() {
-            PaintingFlowController.OnEnteredPainting -= OnEnteredPainting;
-            PaintingFlowController.OnExitedPainting -= OnExitedPainting;
+            PaintingFlowController.EnteredPainting -= EnteredPainting;
+            PaintingFlowController.ExitedPainting -= ExitedPainting;
         }
 
         private void Awake() {
@@ -69,11 +69,11 @@ namespace Painting {
             associatedCamera.StopRendering();
         }
 
-        private void OnEnteredPainting(PlayablePaintingArea _) {
+        private void EnteredPainting(PlayablePaintingArea _) {
             EnterPaintingMode();
         }
 
-        private void OnExitedPainting() {
+        private void ExitedPainting() {
             ExitPaintingMode();
         }
 

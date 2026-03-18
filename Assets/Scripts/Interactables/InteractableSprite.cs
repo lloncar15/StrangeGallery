@@ -48,7 +48,7 @@ namespace Interactables {
         /// </summary>
         /// <returns>True if in Painting state and within trigger range</returns>
         public virtual bool CanBeInteracted() {
-            return _isInRange && GameStateManager.GetCurrentState() == GameState.Painting;
+            return _isInRange && GameStateManager.IsInState(GameState.Painting);
         }
 
     }

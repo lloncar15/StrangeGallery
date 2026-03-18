@@ -1,3 +1,4 @@
+using Conversations;
 using Core;
 using DG.Tweening;
 using Input;
@@ -5,6 +6,7 @@ using Painting;
 using Player.Configs;
 using UnityEngine;
 using Utils;
+using Yarn;
 
 namespace Player {
     [RequireComponent(typeof(CharacterController))]
@@ -23,12 +25,17 @@ namespace Player {
         private PlayablePaintingArea _currentPlayablePaintingArea;
     
         private bool _isMovingToTarget;
+        private bool _canMove = true;
         private Tween _moveTween;
 
         private void OnEnable() {
+            YarnConversationController.DialogueStarted += OnDialogueStarted;
+            YarnConversationController.DialogueEnded += OnDialogueEnded;
         }
 
         private void OnDisable() {
+            YarnConversationController.DialogueStarted -= OnDialogueStarted;
+            YarnConversationController.DialogueEnded -= OnDialogueEnded;
         }
 
         protected override void Awake() {
@@ -38,18 +45,19 @@ namespace Player {
         }
 
         private void Update() {
-            if (_isMovingToTarget) {
+            if (_isMovingToTarget)
                 return;
-            }
+
+            if (!_canMove)
+                return;
         
             Vector2 moveInput = InputController.Instance.MoveInput;
-
-            GameState currentState = GameStateManager.GetCurrentState();
-            if (currentState == GameState.FPS) {
+            
+            if (GameStateManager.IsInState(GameState.FPS)) {
                 HandleLook();
                 Handle3DMovement(moveInput);
             }
-            else if (currentState == GameState.Painting) {
+            else if (GameStateManager.IsInState(GameState.Painting)) {
                 Handle2DMovement(moveInput);
             }
         }
@@ -153,10 +161,22 @@ namespace Player {
         }
 
         public void ExitPainting() {
+            _canMove = true;
             _currentPlayablePaintingArea = null;
             playerSprite.OnExitedPainting();
         }
 
         #endregion
+
+        private void OnDialogueStarted(YarnDialogueProvider _) {
+            DisableMovement();
+        }
+
+        private void OnDialogueEnded(YarnDialogueProvider _) {
+            EnableMovement();
+        }
+        
+        public void EnableMovement() => _canMove = true;
+        public void DisableMovement() => _canMove = false;
     }
 }

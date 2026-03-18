@@ -24,7 +24,7 @@ namespace Player {
         }
 
         private void Update() {
-            if (GameStateManager.GetCurrentState() != GameState.FPS)
+            if (GameStateManager.IsInState(GameState.FPS))
                 return;
 
             HandleFootsteps();

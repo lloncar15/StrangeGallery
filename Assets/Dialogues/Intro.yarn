@@ -10,6 +10,8 @@ Luka: It's really easy to write scripts!
     Luka: heeheh
 -> ...
     Luka: I'm saad :(
+    <<execute_strategy 1>>
+    <<stop>>
     
 Narrator: this is how we write scripts. Good luck!
 ===

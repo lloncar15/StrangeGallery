@@ -12,11 +12,11 @@ namespace Interactables {
         private PlayerInteractionController _controller;
     
         private void OnEnable() {
-            PaintingFlowController.OnExitedPainting += OnExitedPainting;
+            PaintingFlowController.ExitedPainting += ExitedPainting;
         }
 
         private void OnDisable() {
-            PaintingFlowController.OnExitedPainting -= OnExitedPainting;
+            PaintingFlowController.ExitedPainting -= ExitedPainting;
         }
 
         private void OnTriggerEnter(Collider other) {
@@ -47,7 +47,7 @@ namespace Interactables {
         /// Handles the case where the player is force-moved back in front of the painting
         /// and may still be within the trigger collider.
         /// </summary>
-        private void OnExitedPainting() {
+        private void ExitedPainting() {
             if (!_isInRange || _controller == null)
                 return;
         
@@ -63,7 +63,7 @@ namespace Interactables {
         /// </summary>
         /// <returns>True if in FPS state and within trigger range</returns>
         public bool CanBeInteracted() {
-            return _isInRange && GameStateManager.GetCurrentState() == GameState.FPS;
+            return _isInRange && GameStateManager.IsInState(GameState.FPS);
         }
     }
 }

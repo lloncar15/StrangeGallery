@@ -11,8 +11,8 @@ namespace Painting {
         [Header("References")]
         [SerializeField] private PlayerMovementController playerMovementController;
         
-        public static event Action<PlayablePaintingArea> OnEnteredPainting;
-        public static event Action OnExitedPainting;
+        public static event Action<PlayablePaintingArea> EnteredPainting;
+        public static event Action ExitedPainting;
 
         private void OnEnable() {
             InputController.OnExitPressed += ExitPainting;
@@ -23,7 +23,8 @@ namespace Painting {
         }
         
         public void EnterPainting(PaintingObject obj) {
-            GameStateManager.ChangeState(GameState.Painting);
+            GameStateManager.AddState(GameState.Painting);
+            GameStateManager.RemoveState(GameState.FPS);
 
             PaintingCameraConfig cameraConfig = obj.CameraConfig;
         
@@ -35,7 +36,7 @@ namespace Painting {
                 cameraController.config.zoomInEase,
                 obj.PaintingArea);
         
-            OnEnteredPainting?.Invoke(obj.PaintingArea);
+            EnteredPainting?.Invoke(obj.PaintingArea);
         }
         
         public void ExitPainting() {
@@ -44,8 +45,9 @@ namespace Painting {
         
             playerMovementController.ExitPainting();
             PlayerCameraController.Instance.ZoomOut(() => {
-                GameStateManager.ChangeState(GameState.FPS);
-                OnExitedPainting?.Invoke();
+                GameStateManager.RemoveState(GameState.Painting);
+                GameStateManager.AddState(GameState.FPS);
+                ExitedPainting?.Invoke();
             });
         }
     }
