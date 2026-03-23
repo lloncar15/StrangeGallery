@@ -1,17 +1,55 @@
 ﻿title: Start
 ---
-Narrator: Wow, we started with this game! Good luck collecting colors heh!
-Luka: AINAMNUMMM MUMMMIN!
-Luka: It's really easy to write scripts!
--> me too!
-    Luka: hehehe
-    <<execute_strategy 0>>
--> I namnum tummm!
-    Luka: heeheh
--> ...
-    Luka: I'm saad :(
-    <<execute_strategy 1>>
-    <<stop>>
+// Narrator: Wow, we started with this game! Good luck collecting colors heh!
+// Luka: AINAMNUMMM MUMMMIN!
+// Luka: It's really easy to write scripts!
+// -> me too!
+//    Luka: hehehe
+//    <<execute_strategy 0>>
+// -> I namnum tummm!
+//    Luka: heeheh
+// -> ...
+//   Luka: I'm saad :(
+//    <<execute_strategy 1>>
+//    <<stop>>
     
-Narrator: this is how we write scripts. Good luck!
+// Narrator: this is how we write scripts. Good luck!
+
+Me: Now... 
+Me: To just check how my painting has turned out in this lighting of the gallery.
+Me: Oh God!
+Me: This can't be!
+Me: I... I think I know. (CHOOSE SECOND OPTION TO SKIP THE INTRO AND TUTORIAL)
+-> This is probably what went down/:
+    Me: I was so concerned how my composition will end up.
+    Me: All the colours that I will end up using.
+    Me: I had the perfect painting.
+    Me: But, I was careless when giving away my work.
+    Me: I gave the movers just a blank canvas.
+    Me: Just the one where I was trying out a different background.
+    Me: Aaaarghhh!
+    Me: Okay. Chill...
+    Me: All I have to do is just think of a way to make something.
+    Me: I know I can do it.
+    Me: How much time do I have?
+    Me: WHAT?!
+    Me: Only five minutes?!
+    // <<show_timer>>
+    Me: Oh shit, oh shit, OH SHIT!
+    Me: Look (Mouse movement), I don't have that much time
+    Me: I have to move (W-A-S-D) fast!
+    Me: I'll try to interact (E) with whatever I can.
+    Me: Think...
+    Me: Try to remember that crazy odd thing my grandpa thought me.
+    Me: Be the painting.
+    Me: Breathe the painting.
+    Me: Steal the painting.
+    Me: What?!
+    Me: That's it! Steal the paintings.
+    Me: Or at least try to steal parts of them.
+    Me: 
+-> There is no time! I have to salvage what can be salvaged.
+    // <<show_timer>>
+Me: Let's do this!
+// <<start_game>>
 ===
