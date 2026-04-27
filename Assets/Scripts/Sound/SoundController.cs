@@ -63,7 +63,12 @@ namespace Sound {
         /// </summary>
         /// <param name="clip">The music clip to play</param>
         public void PlayMusic(AudioClip clip) {
-            // TODO: Implement music playback
+            if (!clip)
+                return;
+
+            musicSource.clip = clip;
+            musicSource.volume = GetMusicVolume();
+            musicSource.Play();
         }
 
         /// <summary>
